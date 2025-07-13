@@ -18,15 +18,18 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "src"), // ✅ since root is "client"
-      "@shared": path.resolve(import.meta.dirname, "..", "shared"),
-      "@assets": path.resolve(import.meta.dirname, "..", "attached_assets"),
+      "@": path.resolve(import.meta.dirname, "client", "src"),
+      "@shared": path.resolve(import.meta.dirname, "shared"),
+      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
     },
   },
-  root: path.resolve(import.meta.dirname), // 👈 this is already "client/"
+  root: path.resolve(import.meta.dirname, "client"),
   build: {
-    outDir: path.resolve(import.meta.dirname, "..", "dist", "server", "public"), // ✅ KEY FIX
+    outDir: path.resolve(import.meta.dirname, "dist", "server", "public"),
     emptyOutDir: true,
+    rollupOptions: {
+      input: path.resolve(import.meta.dirname, "client", "index.html"),
+    },
   },
   server: {
     fs: {
