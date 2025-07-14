@@ -14,15 +14,18 @@ export default function PrincipalMessage() {
             <h2 className="text-3xl font-bold text-dav-maroon mb-6">Principal's Message</h2>
             <div className="text-lg text-gray-700 space-y-4">
               <p>
-                Welcome to DAV Public School, Asansol! As we embark on another academic year, I am filled with excitement and optimism about the journey ahead.
+                Aristotle once said that “educating the mind without educating the heart is no education at all”. Even as we impart education to match the advancement in technology and globalization, we march our children ahead with the DAV ethos of moral values and principles. Our goal is to provide a time for students to build connections with teachers and peers and to build a stronger sense of community. We believe in the adage “Every day brings new choices, choose to make a positive difference “
               </p>
+                <p>
+                Our goal at DAV is to provide enriching, engaging and challenging curriculum that will prepare STUDENTS FOR SUCCESS while at DAV and the years to follow. We believe that students, parents and teachers play a vital role in helping students to reach their greatest potential.
+             </p>
+                  <p>
+                A committed and supportive management dedicated teachers, caring and cooperative parents blend harmoniously to create a child –centric school.
+           </p>
               <p>
-                Our school stands as a beacon of educational excellence, committed to nurturing young minds and shaping tomorrow's leaders. With our dedicated faculty, state-of-the-art facilities, and comprehensive curriculum, we provide an environment where every student can thrive academically, socially, and personally.
-              </p>
-              <p>
-                At DAV, we believe in the holistic development of our students, fostering not just academic excellence but also character building, creativity, and critical thinking skills that will serve them throughout their lives.
-              </p>
-            </div>
+                I am sure through collaborative effort we can provide more benefit to our  students who are the future leaders of tomorrow.
+                  </p>
+              </div>
             <div className="mt-6">
               <p className="font-semibold text-dav-maroon">Dr. Priya Sharma</p>
               <p className="text-gray-600">Principal, DAV Public School, Asansol</p>
