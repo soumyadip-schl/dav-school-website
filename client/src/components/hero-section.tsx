@@ -13,7 +13,7 @@ export default function HeroSection() {
           <div className="text-center text-white px-4">
             <h1 className="text-4xl md:text-6xl font-bold mb-4 fade-in">Excellence in Education</h1>
             <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto fade-in">
-              Nurturing young minds for a brighter tomorrow at DAV Public School, Asansol
+              Nurturing young minds for a brighter tomorrow at DAV Public School, Kanyapur, Asansol
             </p>
             <div className="space-x-4">
               <Link href="/admissions">
