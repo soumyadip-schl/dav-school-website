@@ -5,7 +5,7 @@ export default function PrincipalMessage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <img 
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=600" 
+              src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/main/attached_assets/Picsart_25-07-15_19-33-26-605.jpg" 
               alt="Principal's photo" 
               className="rounded-xl shadow-lg w-full h-auto"
             />
@@ -28,7 +28,7 @@ export default function PrincipalMessage() {
               </div>
             <div className="mt-6">
               <p className="font-semibold text-dav-maroon">Dr. Priya Sharma</p>
-              <p className="text-gray-600">Principal, DAV Public School, Asansol</p>
+              <p className="text-gray-600">Principal, DAV Public School, Kanyapur, Asansol</p>
             </div>
           </div>
         </div>
