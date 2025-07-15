@@ -27,7 +27,7 @@ export default function PrincipalMessage() {
                   </p>
               </div>
             <div className="mt-6">
-              <p className="font-semibold text-dav-maroon">Dr. Priya Sharma</p>
+              <p className="font-semibold text-dav-maroon">DR Mohanty</p>
               <p className="text-gray-600">Principal, DAV Public School, Kanyapur, Asansol</p>
             </div>
           </div>
