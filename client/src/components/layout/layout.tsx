@@ -1,7 +1,7 @@
 import Header from "./header";
 import Footer from "./footer";
 import NewsTicker from "../news-ticker";
-import Navbar from "../Navbar"; // Add/adjust path if your Navbar is elsewhere
+import Navbar from "../navbar"; // Add/adjust path if your Navbar is elsewhere
 
 interface LayoutProps {
   children: React.ReactNode;
