@@ -9,12 +9,12 @@ export default function Footer() {
             <div className="flex items-center mb-4">
               <img 
                 className="h-12 w-12 rounded-full" 
-                src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&h=100" 
+                src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/e6c5abf3ca5713c3f9afe01822a5b49cb6b957a4/attached_assets/DAV_CMC_Logo.svg.png" 
                 alt="DAV Public School Logo" 
               />
               <div className="ml-4">
                 <h3 className="text-lg font-bold">DAV Public School</h3>
-                <p className="text-sm text-gray-300">Asansol</p>
+                <p className="text-sm text-gray-300">Kanyapur, Asansol</p>
               </div>
             </div>
             <p className="text-gray-300">Excellence in Education since 1999. CBSE Affiliation No. 2430088</p>
@@ -59,7 +59,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-gray-600 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; 2024 DAV Public School, Asansol. All rights reserved. | Designed with ❤️ for education</p>
+          <p>&copy; 2025 DAV Public School, Kanyapur, Asansol. All rights reserved. | Designed with ❤️ for education</p>
         </div>
       </div>
     </footer>
