@@ -11,7 +11,7 @@ export default function Layout({ children }: LayoutProps) {
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
       <NewsTicker />
-      <main className="flex-1 w-full max-w-xl mx-auto px-4">
+      <main className="flex-1 w-full max-w-screen-xl mx-auto px-4 sm:px-8">
         {children}
       </main>
       <Footer />
