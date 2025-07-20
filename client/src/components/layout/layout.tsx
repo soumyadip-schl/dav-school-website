@@ -1,7 +1,6 @@
 import Header from "./header";
 import Footer from "./footer";
 import NewsTicker from "../news-ticker";
-import Navbar from "../navbar";
 
 interface LayoutProps {
   children: React.ReactNode;
