@@ -27,14 +27,14 @@ export default function Header() {
             <div className="flex-shrink-0">
               <img 
                 className="h-12 w-12 rounded-full" 
-                src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/e6c5abf3ca5713c3f9afe01822a5b49cb6b957a4/attached_assets/DAV_CMC_Logo.svg.png"
+                src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&h=100" 
                 alt="DAV Public School Logo" 
               />
             </div>
             <div className="ml-4">
               <Link href="/">
                 <h1 className="text-lg font-bold text-dav-maroon cursor-pointer">DAV Public School</h1>
-                <p className="text-sm text-dav-gray">Kanyapur, Asansol</p>
+                <p className="text-sm text-dav-gray">Asansol</p>
               </Link>
             </div>
           </div>
@@ -62,8 +62,19 @@ export default function Header() {
             <button 
               className="text-gray-700 hover:text-dav-saffron p-2" 
               onClick={toggleMobileMenu}
+              aria-label="Open menu"
             >
-              <i className="fas fa-bars text-xl"></i>
+              {/* Use an accessible menu icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
             </button>
           </div>
         </div>
@@ -71,15 +82,15 @@ export default function Header() {
       
       {/* Mobile Navigation */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t">
+        <div className="md:hidden bg-white border-t shadow">
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href}>
                 <span 
                   className={cn(
-                    "block px-3 py-2 cursor-pointer",
+                    "block px-3 py-2 cursor-pointer rounded transition-colors",
                     location === item.href 
-                      ? "text-dav-maroon font-medium" 
+                      ? "text-dav-maroon font-medium bg-dav-light" 
                       : "text-gray-700 hover:text-dav-saffron"
                   )}
                   onClick={() => setIsMobileMenuOpen(false)}
