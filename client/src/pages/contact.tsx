@@ -79,9 +79,12 @@ export default function Contact() {
                   <div>
                     <h3 className="font-semibold">Address</h3>
                     <p className="text-gray-600">
-                      DAV Public School<br />
-                      Sector 12, Asansol - 713301<br />
-                      West Bengal, India
+                      DAV PUBLIC SCHOOL, KANYAPUR, ASANSOL<br />
+                      BESIDE DISTRICT MAGISTRATE OFFICE,<br />
+                      LIONS CLUB ROAD,<br />
+                      PO- R.K MISSION, PS-ASANSOL (N)<br />
+                      DT : PASCHIM BURDWAN , PIN : 713305<br />
+                      City : ASANSOL, State : WEST BENGAL
                     </p>
                   </div>
                 </div>
@@ -269,11 +272,16 @@ export default function Contact() {
         <div className="mt-12">
           <div className="bg-white p-4 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold text-dav-maroon mb-4">Our Location</h2>
-            <div className="h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-              <p className="text-gray-600">
-                <i className="fas fa-map text-dav-saffron mr-2"></i>
-                Interactive Map - DAV Public School, Asansol
-              </p>
+            <div className="h-64 rounded-lg overflow-hidden">
+              <iframe
+                title="DAV Public School, Kanyapur, Asansol Location"
+                src="https://www.google.com/maps?q=DAV+Public+School,+Kanyapur,+Beside+District+Magistrate+Office,+Lions+Club+Road,+R.K+Mission,+Asansol,+West+Bengal+713305&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0, borderRadius: '0.75rem' }}
+                allowFullScreen
+                loading="lazy"
+              />
             </div>
           </div>
         </div>
