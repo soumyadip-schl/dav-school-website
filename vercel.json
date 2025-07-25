@@ -1,7 +1,6 @@
 {
-  "root": "client",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist",
+  "outputDirectory": "dist/server/public",
   "cleanUrls": true,
   "trailingSlash": false
 }
