@@ -9,7 +9,9 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header />
+      <div className="sticky top-0 z-50 w-full">
+        <Header />
+      </div>
       <NewsTicker />
       <main className="flex-1 w-full max-w-screen-xl mx-auto px-4 sm:px-8">
         {children}
