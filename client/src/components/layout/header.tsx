@@ -27,8 +27,8 @@ export default function Header() {
             <div className="flex-shrink-0">
               <img 
                 className="h-12 w-12 rounded-full" 
-                src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&h=100" 
-                alt="DAV Public School Logo" 
+                src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/e6c5abf3ca5713c3f9afe01822a5b49cb6b957a4/attached_assets/DAV_CMC_Logo.svg.png" 
+                alt="DAV Public School Logo"  
               />
             </div>
             <div className="ml-4">
