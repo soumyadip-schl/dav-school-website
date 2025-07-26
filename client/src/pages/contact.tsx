@@ -79,12 +79,12 @@ export default function Contact() {
                   <div>
                     <h3 className="font-semibold">Address</h3>
                     <p className="text-gray-600">
-                      DAV PUBLIC SCHOOL, KANYAPUR, ASANSOL<br />
-                      BESIDE DISTRICT MAGISTRATE OFFICE,<br />
-                      LIONS CLUB ROAD,<br />
-                      PO- R.K MISSION, PS-ASANSOL (N)<br />
-                      DT : PASCHIM BURDWAN , PIN : 713305<br />
-                      City : ASANSOL, State : WEST BENGAL
+                      DAV Public School, Kanyapur, Asansol<br />
+                      Opposite to District Magistrate Office,<br />
+                      Lions Club Road,<br />
+                      PO- R.K Mission, PS-Asansol (N)<br />
+                      DT : Paschim Bardhaman , PIN : 713305<br />
+                      City : Asansol, State : West Bengal 
                     </p>
                   </div>
                 </div>
@@ -96,8 +96,8 @@ export default function Contact() {
                   <div>
                     <h3 className="font-semibold">Phone</h3>
                     <p className="text-gray-600">
-                      +91 341 234 5678<br />
-                      +91 341 234 5679
+                      03412257755<br />
+                      03412999244
                     </p>
                   </div>
                 </div>
@@ -109,8 +109,8 @@ export default function Contact() {
                   <div>
                     <h3 className="font-semibold">Email</h3>
                     <p className="text-gray-600">
-                      info@davpublicschoolasansol.edu.in<br />
-                      admissions@davpublicschoolasansol.edu.in
+                      dav.asnl@gmail.com<br />
+                      schl.soumyadipkarforma@gmail.com
                     </p>
                   </div>
                 </div>
@@ -122,7 +122,7 @@ export default function Contact() {
                   <div>
                     <h3 className="font-semibold">Office Hours</h3>
                     <p className="text-gray-600">
-                      Monday - Friday: 8:00 AM - 4:00 PM<br />
+                      Monday - Friday: 8:00 AM - 2:00 PM<br />
                       Saturday: 8:00 AM - 12:00 PM
                     </p>
                   </div>
