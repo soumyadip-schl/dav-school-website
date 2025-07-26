@@ -1,7 +1,6 @@
 import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
 import { insertContactSchema, insertUserSchema, insertPostSchema, insertSiteSettingsSchema, insertPageSchema, insertPageComponentSchema, insertMenuItemSchema, insertFormSchema } from "@shared/schema";
 import { z } from "zod";
 import { authenticateToken, requireAdmin, hashPassword, comparePassword, type AuthenticatedRequest } from "./auth";
@@ -32,9 +31,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/contact", async (req, res) => {
     try {
       const contactData = insertContactSchema.parse(req.body);
-      const contact = await storage.createContact(contactData);
 
-      // ===== EMAIL SENDING START =====
+      // ===== EMAIL SENDING ONLY =====
       let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -56,12 +54,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         await transporter.sendMail(mailOptions);
       } catch (err) {
-        // Optionally: log error, but don't block response
         console.error("Failed to send contact form email:", err);
+        return res.status(500).json({ success: false, message: "Failed to send message. Please try again later." });
       }
-      // ===== EMAIL SENDING END =====
+      // ===== END EMAIL SENDING ONLY =====
 
-      res.json({ success: true, message: "Contact form submitted successfully", contact });
+      res.json({ success: true, message: "Contact form submitted successfully" });
     } catch (error) {
       if (error instanceof z.ZodError) {
         res.status(400).json({ success: false, message: "Invalid form data", errors: error.errors });
@@ -83,8 +81,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // [rest of file unchanged...]
-  // Only the /api/contact route has been updated.
-  // (for brevity, the remaining code is unchanged.)
   const httpServer = createServer(app);
   return httpServer;
 }
