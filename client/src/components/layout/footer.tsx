@@ -59,8 +59,13 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-gray-600 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; 2025 DAV Public School, Kanyapur, Asansol. All rights reserved. | Designed with ❤️ for education</p>
-        </div>
+  <div className="max-w-screen-xl mx-auto px-4">
+    <p>
+      &copy; 2025 DAV Public School, Kanyapur, Asansol. All rights reserved. | 
+      Designed with 🧡🤍💚 by Soumyadip Karforma
+    </p>
+  </div>
+</div>
       </div>
     </footer>
   );
