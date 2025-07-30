@@ -17,9 +17,11 @@ export default function Footer() {
                 <p className="text-sm text-gray-300">Kanyapur, Asansol</p>
               </div>
             </div>
-            <p className="text-gray-300">Excellence in Education since 1999. CBSE Affiliation No. 2430088</p>
+            <p className="text-gray-300">
+              Excellence in Education since 1999. CBSE Affiliation No. 2430088
+            </p>
           </div>
-          
+
           <div>
             <h4 className="text-lg font-semibold mb-4">External Resources</h4>
             <ul className="space-y-2 text-gray-300">
@@ -30,7 +32,7 @@ export default function Footer() {
               <li><Link href="/contact"><span className="hover:text-dav-saffron transition-colors cursor-pointer">Contact</span></Link></li>
             </ul>
           </div>
-          
+
           <div>
             <h4 className="text-lg font-semibold mb-4">Academics</h4>
             <ul className="space-y-2 text-gray-300">
@@ -41,7 +43,7 @@ export default function Footer() {
               <li><span className="hover:text-dav-saffron transition-colors cursor-pointer">Facilities</span></li>
             </ul>
           </div>
-          
+
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
             <div className="text-gray-300 space-y-2">
@@ -57,15 +59,17 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        
+
+        {/* This section is still inside the main footer container */}
         <div className="border-t border-gray-600 mt-8 pt-8 text-center text-gray-300">
-  <div className="max-w-screen-xl mx-auto px-4">
-    <p>
-      &copy; 2025 DAV Public School, Kanyapur, Asansol. All rights reserved. | 
-      Designed with 🧡🤍💚 by Soumyadip Karforma
-    </p>
-  </div>
-</div>
+          <div className="max-w-screen-xl mx-auto px-4">
+            <p>
+              &copy; 2025 DAV Public School, Kanyapur, Asansol. All rights reserved. | 
+              Designed with 🧡🤍💚 by Soumyadip Karforma
+            </p>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 }
