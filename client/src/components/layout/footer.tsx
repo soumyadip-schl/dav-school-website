@@ -25,11 +25,12 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">External Resources</h4>
             <ul className="space-y-2 text-gray-300">
-              <li><Link href="/about"><span className="hover:text-dav-saffron transition-colors cursor-pointer">About Us</span></Link></li>
-              <li><Link href="/academics"><span className="hover:text-dav-saffron transition-colors cursor-pointer">Academics</span></Link></li>
-              <li><Link href="/admissions"><span className="hover:text-dav-saffron transition-colors cursor-pointer">Admissions</span></Link></li>
-              <li><Link href="/gallery"><span className="hover:text-dav-saffron transition-colors cursor-pointer">Gallery</span></Link></li>
-              <li><Link href="/contact"><span className="hover:text-dav-saffron transition-colors cursor-pointer">Contact</span></Link></li>
+              <li><Link href="https://davcmc.net.in"><span className="hover:text-dav-saffron transition-colors cursor-pointer">About DAV CMC</span></Link></li>
+              <li><Link href="https://appsabha.org"><span className="hover:text-dav-saffron transition-colors cursor-pointer">Arya Samaj</span></Link></li>
+              <li><Link href="https://davcmc.net.in/B46D2794-51B4-4B3A-95B8-46BB25875D74/CMS/Page/MESSAGE-OF-THE-PRESIDENT"><span className="hover:text-dav-saffron transition-colors cursor-pointer">President's Message</span></Link></li>
+              <li><Link href="https://youtube.com/@davcmcvideos?feature=shared"><span className="hover:text-dav-saffron transition-colors cursor-pointer">DAV CMC Videos</span></Link></li>
+              <li><Link href="https://www.facebook.com/davunited"><span className="hover:text-dav-saffron transition-colors cursor-pointer">Alumni</span></Link></li>
+              <li><Link href="https://ihub.davcmc.net.in/"><span className="hover:text-dav-saffron transition-colors cursor-pointer">DAV CMC Intellectual Hub</span></Link></li>
             </ul>
           </div>
 
