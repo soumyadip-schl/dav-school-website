@@ -25,12 +25,66 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">External Resources</h4>
             <ul className="space-y-2 text-gray-300">
-              <li><Link href="https://davcmc.net.in"><span className="hover:text-dav-saffron transition-colors cursor-pointer">About DAV CMC</span></Link></li>
-              <li><Link href="https://appsabha.org"><span className="hover:text-dav-saffron transition-colors cursor-pointer">Arya Samaj</span></Link></li>
-              <li><Link href="https://davcmc.net.in/B46D2794-51B4-4B3A-95B8-46BB25875D74/CMS/Page/MESSAGE-OF-THE-PRESIDENT"><span className="hover:text-dav-saffron transition-colors cursor-pointer">President's Message</span></Link></li>
-              <li><Link href="https://youtube.com/@davcmcvideos?feature=shared"><span className="hover:text-dav-saffron transition-colors cursor-pointer">DAV CMC Videos</span></Link></li>
-              <li><Link href="https://www.facebook.com/davunited"><span className="hover:text-dav-saffron transition-colors cursor-pointer">Alumni</span></Link></li>
-              <li><Link href="https://ihub.davcmc.net.in/"><span className="hover:text-dav-saffron transition-colors cursor-pointer">DAV CMC Intellectual Hub</span></Link></li>
+              <li>
+                <a
+                  href="https://davcmc.net.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-dav-saffron transition-colors cursor-pointer"
+                >
+                  About DAV CMC
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://appsabha.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-dav-saffron transition-colors cursor-pointer"
+                >
+                  Arya Samaj
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://davcmc.net.in/B46D2794-51B4-4B3A-95B8-46BB25875D74/CMS/Page/MESSAGE-OF-THE-PRESIDENT"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-dav-saffron transition-colors cursor-pointer"
+                >
+                  President's Message
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://youtube.com/@davcmcvideos?feature=shared"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-dav-saffron transition-colors cursor-pointer"
+                >
+                  DAV CMC Videos
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.facebook.com/davunited"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-dav-saffron transition-colors cursor-pointer"
+                >
+                  Alumni
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://ihub.davcmc.net.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-dav-saffron transition-colors cursor-pointer"
+                >
+                  DAV CMC Intellectual Hub
+                </a>
+              </li>
             </ul>
           </div>
 
