@@ -1,9 +1,9 @@
 import HeroSection from "@/components/hero-section";
-//import QuickLinks from "@/components/quick-links";
+import QuickLinks from "@/components/quick-links";
 import PrincipalMessage from "@/components/principal-message";
-//import EventsCalendar from "@/components/events-calendar";
+import EventsCalendar from "@/components/events-calendar";
 import ImageGallery from "@/components/image-gallery";
-//import Testimonials from "@/components/testimonials";
+import Testimonials from "@/components/testimonials";
 
 export default function Home() {
   return (
