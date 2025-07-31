@@ -91,7 +91,7 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
             <div className="text-gray-300 space-y-2">
-              <p><i className="fas fa-map-marker-alt mr-2"></i>DAV Public School, Kanyapur, Asansol<br>
+              <p><i className="fas fa-map-marker-alt mr-2"></i>DAV Public School, Kanyapur, Asansol
                                                              Lions Club Road opp to DM Office Asansol-05</p>
               <p><i className="fas fa-phone mr-2"></i>03412999244</p>
               <p><i className="fas fa-envelope mr-2"></i>dav.asnl@gmail.com</p>
