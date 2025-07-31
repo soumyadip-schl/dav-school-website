@@ -1,6 +1,6 @@
 import Header from "./header";
 import Footer from "./footer";
-import NewsTicker from "../news-ticker";
+
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,7 +15,6 @@ export default function Layout({ children }: LayoutProps) {
           <Header />
         </div>
       </div>
-      <NewsTicker />
       {/* Main content container matches the header width and padding */}
       <main className="flex-1 w-full mx-auto px-4 sm:px-8 max-w-screen-xl">
         {children}
