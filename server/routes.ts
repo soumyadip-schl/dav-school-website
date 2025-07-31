@@ -6,7 +6,8 @@ import { z } from "zod";
 import { authenticateToken, requireAdmin, hashPassword, comparePassword, type AuthenticatedRequest } from "./auth";
 import multer from "multer";
 import path from "path";
-import nodemailer from "nodemailer"; // <-- Added for email functionality
+import nodemailer from "nodemailer";
+import eventsRouter from "./events"; // <-- Add this import
 
 // Configure multer for file uploads
 const upload = multer({
@@ -27,6 +28,7 @@ const upload = multer({
 export async function registerRoutes(app: Express): Promise<Server> {
   // Serve uploaded files
   app.use('/uploads', express.static('uploads'));
+
   // Contact form submission
   app.post("/api/contact", async (req, res) => {
     try {
@@ -69,7 +71,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ... rest of your routes remain unchanged ...
+  // Register the events API router
+  app.use(eventsRouter);
+
+  // ... rest of your existing routes (unchanged) ...
 
   app.get("/api/news", async (req, res) => {
     try {
