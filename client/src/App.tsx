@@ -13,6 +13,7 @@ import Contact from "@/pages/contact";
 import NotFound from "@/pages/not-found";
 import AdminLogin from "@/pages/admin-login";
 import Admin from "@/pages/admin";
+import EventsPage from "@/pages/events"; // <-- Add this import
 
 function Router() {
   return (
@@ -26,6 +27,7 @@ function Router() {
         <Route path="/contact" component={Contact} />
         <Route path="/admin/login" component={AdminLogin} />
         <Route path="/admin" component={Admin} />
+        <Route path="/events" component={EventsPage} /> {/* <-- Add this line */}
         <Route component={NotFound} />
       </Switch>
     </Layout>
