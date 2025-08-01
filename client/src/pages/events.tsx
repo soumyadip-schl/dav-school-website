@@ -1,14 +1,14 @@
-// client/src/pages/events.tsx
 import React, { useEffect, useState } from "react";
-import EventsList from "@/components/events-list";
+import EventsList from "../components/events-list";
 
-export interface EventItem {
+// Alias type for API event objects (matching your backend)
+export type EventItem = {
   TITLE: string;
   DESCRIPTION?: string;
   IMG_1?: string;
   IMG_2?: string;
   IMG_3?: string;
-}
+};
 
 export default function EventsPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
@@ -20,9 +20,11 @@ export default function EventsPage() {
         const res = await fetch("/api/events");
         if (!res.ok) throw new Error("Failed to fetch events");
         const data = await res.json();
-        setEvents(data);
+        // Expecting { events: EventItem[] }
+        setEvents(Array.isArray(data.events) ? data.events : []);
       } catch (err) {
         console.error("Error fetching events:", err);
+        setEvents([]);
       } finally {
         setLoading(false);
       }
