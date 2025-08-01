@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import EventsList from "../components/events-list";
 
-// Alias type for API event objects (matching your backend)
+// Type definition for your event
 export type EventItem = {
   TITLE: string;
   DESCRIPTION?: string;
@@ -20,16 +20,14 @@ export default function EventsPage() {
         const res = await fetch("/api/events");
         if (!res.ok) throw new Error("Failed to fetch events");
         const data = await res.json();
-        // Expecting { events: EventItem[] }
+        // The backend returns { events: EventItem[] }
         setEvents(Array.isArray(data.events) ? data.events : []);
       } catch (err) {
-        console.error("Error fetching events:", err);
         setEvents([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchEvents();
   }, []);
 
