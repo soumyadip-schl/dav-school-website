@@ -76,15 +76,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // ... rest of your existing routes (unchanged) ...
 
-  app.get("/api/news", async (req, res) => {
-    try {
-      const news = await storage.getActiveNews();
-      res.json(news);
-    } catch (error) {
-      res.status(500).json({ success: false, message: "Failed to fetch news" });
-    }
-  });
-
   // [rest of file unchanged...]
   const httpServer = createServer(app);
   return httpServer;
