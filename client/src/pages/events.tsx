@@ -1,70 +1,46 @@
-import { EventItem } from "@/pages/events";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from "react-responsive-carousel";
+// pages/events.tsx
+import React, { useEffect, useState } from "react";
+import EventsList from "@/components/events-list";
 
-function driveLinkToDirectImage(url: string | undefined): string | null {
-  if (!url) return null;
-  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (match) {
-    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
-  }
-  const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (idMatch) {
-    return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
-  }
-  return null;
+// Define the type for an event; you can adjust the keys if needed.
+export interface EventItem {
+  TITLE: string;
+  DESCRIPTION?: string;
+  IMG_1?: string;
+  IMG_2?: string;
+  IMG_3?: string;
 }
 
-export default function EventsList({ events }: { events: EventItem[] }) {
-  if (!events || !events.length) return <div>No events found.</div>;
+export default function EventsPage() {
+  const [events, setEvents] = useState<EventItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const res = await fetch("/api/events"); // Ensure this route returns your event JSON
+        if (!res.ok) {
+          throw new Error("Failed to fetch events");
+        }
+        const data: EventItem[] = await res.json();
+        setEvents(data);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchEvents();
+  }, []);
 
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {events.map((event, idx) => {
-        const images = [event.IMG_1, event.IMG_2, event.IMG_3]
-          .filter((img) => typeof img === "string" && img.trim().length > 0)
-          .map((img) => driveLinkToDirectImage(img))
-          .filter(Boolean) as string[];
-
-        return (
-          <div
-            key={idx}
-            className="bg-white rounded-lg shadow-md p-0 flex flex-col overflow-hidden"
-          >
-            {images.length > 0 && (
-              <Carousel
-                showThumbs={false}
-                showStatus={false}
-                infiniteLoop
-                autoPlay={images.length > 1}
-                interval={4000}
-                className="w-full aspect-square"
-                swipeable
-                emulateTouch
-              >
-                {images.map((src, i) => (
-                  <div key={i} className="w-full h-64 bg-gray-200">
-                    <img
-                      src={src}
-                      alt={`Event ${event.TITLE} image ${i + 1}`}
-                      className="object-cover w-full h-64"
-                      style={{ objectFit: "cover", width: "100%", height: "16rem" }}
-                    />
-                  </div>
-                ))}
-              </Carousel>
-            )}
-            <div className="p-6 flex flex-col">
-              <h2 className="text-2xl font-bold mb-2 text-center">{event.TITLE}</h2>
-              <div className="whitespace-pre-line text-base text-gray-900 text-center">
-                {(event.DESCRIPTION || event["DESCRIPTION "] || "").trim()
-                  ? (event.DESCRIPTION || event["DESCRIPTION "])
-                  : <span className="italic text-gray-400">No description</span>}
-              </div>
-            </div>
-          </div>
-        );
-      })}
+    <div className="px-4 py-8 max-w-7xl mx-auto">
+      {loading ? (
+        <p className="text-center text-gray-600">Loading events...</p>
+      ) : (
+        <EventsList events={events} />
+      )}
     </div>
   );
 }
