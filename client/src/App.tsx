@@ -11,8 +11,6 @@ import Admissions from "@/pages/admissions";
 import Gallery from "@/pages/gallery";
 import Contact from "@/pages/contact";
 import NotFound from "@/pages/not-found";
-import AdminLogin from "@/pages/admin-login";
-import Admin from "@/pages/admin";
 import EventsPage from "@/pages/events"; // <-- Add this import
 
 function Router() {
@@ -25,8 +23,6 @@ function Router() {
         <Route path="/admissions" component={Admissions} />
         <Route path="/gallery" component={Gallery} />
         <Route path="/contact" component={Contact} />
-        <Route path="/admin/login" component={AdminLogin} />
-        <Route path="/admin" component={Admin} />
         <Route path="/events" component={EventsPage} /> {/* <-- Add this line */}
         <Route component={NotFound} />
       </Switch>
