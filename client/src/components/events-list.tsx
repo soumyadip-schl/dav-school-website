@@ -21,7 +21,14 @@ export default function EventsList({ events }: { events: EventItem[] }) {
           className="bg-white rounded-lg shadow-md p-6 flex flex-col"
         >
           <h2 className="text-xl font-semibold mb-2">{event.TITLE}</h2>
-          <p className="mb-4">{event.DESCRIPTION}</p>
+          {/* Multi-paragraph DESCRIPTION */}
+          {(event.DESCRIPTION || "")
+            .split(/\n\s*\n/) // split by double line breaks for paragraphs
+            .map((paragraph, i) => (
+              <p key={i} className="mb-3 whitespace-pre-line">
+                {paragraph.trim()}
+              </p>
+            ))}
           <div className="flex flex-wrap gap-2">
             {[event.IMG_1, event.IMG_2, event.IMG_3]
               .filter((img) => !!img)
