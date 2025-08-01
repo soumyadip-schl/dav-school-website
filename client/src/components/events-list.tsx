@@ -1,21 +1,23 @@
 import React from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import type { EventItem } from "../pages/events"; // Alias from page, avoids circular import
+import type { EventItem } from "../pages/events";
 
-// Convert Drive share link → direct image link
-const driveLinkToImage = (url?: string): string | null => {
-  if (!url || !url.includes("drive.google.com")) return null;
+// Converts Google Drive share URLs to direct image URLs
+function driveLinkToImage(url?: string): string | null {
+  if (!url) return null;
+  // Handles links like: https://drive.google.com/file/d/<ID>/view?usp=drivesdk
   const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
   if (match) {
     return `https://drive.google.com/uc?export=view&id=${match[1]}`;
   }
+  // Optionally handle ?id= links
   const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
   if (idMatch) {
     return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
   }
   return null;
-};
+}
 
 interface Props {
   events: EventItem[];
@@ -44,11 +46,12 @@ const EventsList: React.FC<Props> = ({ events }) => {
                 emulateTouch
               >
                 {images.map((src, i) => (
-                  <div key={i} className="h-64 w-full bg-gray-100">
+                  <div key={i} className="h-64 w-full bg-gray-100 flex items-center justify-center">
                     <img
                       src={src}
                       alt={`Event ${event.TITLE} image ${i + 1}`}
                       className="w-full h-64 object-cover"
+                      style={{ objectFit: "cover", maxHeight: "16rem", width: "100%" }}
                       onError={(e) => {
                         (e.currentTarget as HTMLImageElement).style.display = "none";
                       }}
