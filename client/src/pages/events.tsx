@@ -1,8 +1,7 @@
-// pages/events.tsx
+// client/src/pages/events.tsx
 import React, { useEffect, useState } from "react";
 import EventsList from "@/components/events-list";
 
-// Define the type for an event; you can adjust the keys if needed.
 export interface EventItem {
   TITLE: string;
   DESCRIPTION?: string;
@@ -16,20 +15,18 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchEvents() {
+    const fetchEvents = async () => {
       try {
-        const res = await fetch("/api/events"); // Ensure this route returns your event JSON
-        if (!res.ok) {
-          throw new Error("Failed to fetch events");
-        }
-        const data: EventItem[] = await res.json();
+        const res = await fetch("/api/events");
+        if (!res.ok) throw new Error("Failed to fetch events");
+        const data = await res.json();
         setEvents(data);
-      } catch (error) {
-        console.error("Error fetching events:", error);
+      } catch (err) {
+        console.error("Error fetching events:", err);
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchEvents();
   }, []);
