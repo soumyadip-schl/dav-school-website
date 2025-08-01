@@ -1,7 +1,6 @@
 import { EventItem } from "@/pages/events";
 
 function extractDriveId(url: string | undefined): string | null {
-  // Handles both "file/d/ID/view" and "open?id=ID"
   if (!url) return null;
   const fileMatch = url.match(/file\/d\/([a-zA-Z0-9_-]+)/);
   if (fileMatch) return fileMatch[1];
@@ -21,14 +20,10 @@ export default function EventsList({ events }: { events: EventItem[] }) {
           className="bg-white rounded-lg shadow-md p-6 flex flex-col"
         >
           <h2 className="text-xl font-semibold mb-2">{event.TITLE}</h2>
-          {/* Multi-paragraph DESCRIPTION */}
-          {(event.DESCRIPTION || "")
-            .split(/\n\s*\n/) // split by double line breaks for paragraphs
-            .map((paragraph, i) => (
-              <p key={i} className="mb-3 whitespace-pre-line">
-                {paragraph.trim()}
-              </p>
-            ))}
+          {/* Render DESCRIPTION with line breaks preserved */}
+          <div className="mb-4 whitespace-pre-line text-base text-gray-800">
+            {event.DESCRIPTION}
+          </div>
           <div className="flex flex-wrap gap-2">
             {[event.IMG_1, event.IMG_2, event.IMG_3]
               .filter((img) => !!img)
@@ -40,7 +35,7 @@ export default function EventsList({ events }: { events: EventItem[] }) {
                     key={i}
                     src={`https://drive.google.com/uc?export=view&id=${id}`}
                     alt={`Event ${event.TITLE} image ${i + 1}`}
-                    className="w-24 h-24 object-cover rounded"
+                    className="w-32 h-32 object-cover rounded"
                   />
                 );
               })}
