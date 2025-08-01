@@ -1,12 +1,16 @@
 import { EventItem } from "@/pages/events";
 
-// Helper to convert Google Drive share link to direct image link
 function driveLinkToDirectImage(url: string | undefined): string | null {
   if (!url) return null;
-  // Match the file ID from "file/d/ID/"
-  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)\//);
+  // Match file ID from "file/d/ID"
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
   if (match) {
     return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  }
+  // For URLs like "?id=..."
+  const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (idMatch) {
+    return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
   }
   return null;
 }
@@ -22,7 +26,6 @@ export default function EventsList({ events }: { events: EventItem[] }) {
           className="bg-white rounded-lg shadow-md p-6 flex flex-col"
         >
           <h2 className="text-xl font-semibold mb-2">{event.TITLE}</h2>
-          {/* Use the exact DESCRIPTION key, with or without trailing space */}
           <div className="mb-4 whitespace-pre-line text-base text-gray-900">
             {(event.DESCRIPTION || event["DESCRIPTION "] || "").trim()
               ? (event.DESCRIPTION || event["DESCRIPTION "])
@@ -30,9 +33,10 @@ export default function EventsList({ events }: { events: EventItem[] }) {
           </div>
           <div className="flex flex-wrap gap-2">
             {[event.IMG_1, event.IMG_2, event.IMG_3]
-              .filter((img) => typeof img === "string" && img.trim().startsWith("http"))
+              .filter((img) => typeof img === "string" && img.trim().length > 0)
               .map((img, i) => {
                 const src = driveLinkToDirectImage(img);
+                console.log(`Resolved src for event "${event.TITLE}" img ${i + 1}:`, src);
                 if (!src) return null;
                 return (
                   <img
@@ -40,7 +44,6 @@ export default function EventsList({ events }: { events: EventItem[] }) {
                     src={src}
                     alt={`Event ${event.TITLE} image ${i + 1}`}
                     className="w-32 h-32 object-cover rounded bg-gray-200"
-                    onError={e => (e.currentTarget.style.display = "none")}
                   />
                 );
               })}
