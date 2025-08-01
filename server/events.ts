@@ -11,9 +11,33 @@ function csvToJson(csv: string) {
   const [header, ...rows] = csv.trim().split("\n");
   const columns = header.split(",").map(h => h.trim().replace(/(^"|"$)/g, ""));
   return rows.map(row => {
-    const values = row.split(",").map(v => v.trim().replace(/(^"|"$)/g, ""));
+    // Handle quoted fields that may contain commas
+    const values: string[] = [];
+    let i = 0;
+    let current = "";
+    let insideQuotes = false;
+    for (let c of row) {
+      if (c === '"' && !insideQuotes) {
+        insideQuotes = true;
+        continue;
+      }
+      if (c === '"' && insideQuotes) {
+        insideQuotes = false;
+        continue;
+      }
+      if (c === ',' && !insideQuotes) {
+        values.push(current);
+        current = "";
+        i++;
+        continue;
+      }
+      current += c;
+    }
+    values.push(current);
+    // Clean up quotes
+    const cleaned = values.map(v => v.trim().replace(/(^"|"$)/g, ""));
     return columns.reduce((obj, col, i) => {
-      obj[col] = values[i] || "";
+      obj[col] = cleaned[i] || "";
       return obj;
     }, {} as Record<string, string>);
   });
