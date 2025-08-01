@@ -3,23 +3,6 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import type { EventItem } from "../pages/events";
 
-// Converts Google Drive share/view URLs to direct image URLs
-function driveLinkToImage(url?: string): string | null {
-  if (!url) return null;
-  // Handles links like: https://drive.google.com/file/d/<ID>/view?usp=drivesdk
-  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (match) {
-    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
-  }
-  // Handles links like: https://drive.google.com/open?id=<ID>
-  const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (idMatch) {
-    return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
-  }
-  // fallback: return the original URL so broken icons show
-  return url;
-}
-
 interface Props {
   events: EventItem[];
 }
@@ -30,14 +13,11 @@ const EventsList: React.FC<Props> = ({ events }) => {
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {events.map((event, idx) => {
-        // Always include all image links, even if broken
-        const images = [event.IMG_1, event.IMG_2, event.IMG_3]
-          .map((link) => driveLinkToImage(link))
-          .filter((src): src is string => !!src);
+        // Directly use image links from backend, no processing
+        const images = [event.IMG_1, event.IMG_2, event.IMG_3].filter(Boolean);
 
         return (
           <div key={idx} className="bg-white rounded-lg shadow-md overflow-hidden">
-            {/* Show image(s) or fallback */}
             {images.length > 0 ? (
               <Carousel
                 showThumbs={false}
@@ -60,7 +40,6 @@ const EventsList: React.FC<Props> = ({ events }) => {
                 ))}
               </Carousel>
             ) : (
-              // Fallback image or empty space if no images
               <div className="h-64 w-full bg-gray-200 flex items-center justify-center text-gray-400">
                 <span>No image available</span>
               </div>
@@ -69,7 +48,9 @@ const EventsList: React.FC<Props> = ({ events }) => {
             <div className="p-4 text-center">
               <h3 className="text-xl font-semibold mb-2">{event.TITLE}</h3>
               <p className="text-gray-700 whitespace-pre-line">
-                {typeof event.DESCRIPTION === "string" && event.DESCRIPTION.trim() ? event.DESCRIPTION.trim() : "No description"}
+                {typeof event.DESCRIPTION === "string" && event.DESCRIPTION.trim()
+                  ? event.DESCRIPTION.trim()
+                  : "No description"}
               </p>
             </div>
           </div>
