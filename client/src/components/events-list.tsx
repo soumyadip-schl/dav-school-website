@@ -16,7 +16,8 @@ function driveLinkToImage(url?: string): string | null {
   if (idMatch) {
     return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
   }
-  return null;
+  // fallback: return the original URL so broken icons show
+  return url;
 }
 
 interface Props {
@@ -29,6 +30,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {events.map((event, idx) => {
+        // Always include all image links, even if broken
         const images = [event.IMG_1, event.IMG_2, event.IMG_3]
           .map((link) => driveLinkToImage(link))
           .filter((src): src is string => !!src);
@@ -52,9 +54,6 @@ const EventsList: React.FC<Props> = ({ events }) => {
                       alt={`Event ${event.TITLE} image ${i + 1}`}
                       className="w-full h-64 object-cover"
                       style={{ objectFit: "cover", maxHeight: "16rem", width: "100%" }}
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).style.display = "none";
-                      }}
                     />
                   </div>
                 ))}
