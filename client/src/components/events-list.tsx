@@ -3,7 +3,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import type { EventItem } from "../pages/events";
 
-// Converts Google Drive share URLs to direct image URLs
+// Converts Google Drive share/view URLs to direct image URLs
 function driveLinkToImage(url?: string): string | null {
   if (!url) return null;
   // Handles links like: https://drive.google.com/file/d/<ID>/view?usp=drivesdk
@@ -11,7 +11,7 @@ function driveLinkToImage(url?: string): string | null {
   if (match) {
     return `https://drive.google.com/uc?export=view&id=${match[1]}`;
   }
-  // Optionally handle ?id= links
+  // Handles links like: https://drive.google.com/open?id=<ID>
   const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
   if (idMatch) {
     return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
@@ -37,7 +37,8 @@ const EventsList: React.FC<Props> = ({ events }) => {
 
         return (
           <div key={idx} className="bg-white rounded-lg shadow-md overflow-hidden">
-            {images.length > 0 && (
+            {/* Show image(s) or fallback */}
+            {images.length > 0 ? (
               <Carousel
                 showThumbs={false}
                 showStatus={false}
@@ -58,6 +59,11 @@ const EventsList: React.FC<Props> = ({ events }) => {
                   </div>
                 ))}
               </Carousel>
+            ) : (
+              // Fallback image or empty space if no images
+              <div className="h-64 w-full bg-gray-200 flex items-center justify-center text-gray-400">
+                <span>No image available</span>
+              </div>
             )}
 
             <div className="p-4 text-center">
