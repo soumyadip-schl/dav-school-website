@@ -1,16 +1,9 @@
 import React, { useState } from "react";
 import type { EventItem } from "../pages/events";
 
-/**
- * Converts a GitHub blob link at a specific commit to a raw file URL.
- * Supports links like:
- * https://github.com/owner/repo/blob/commit/path/to/file.png
- * Converts to:
- * https://raw.githubusercontent.com/owner/repo/commit/path/to/file.png
- */
 function githubBlobToRaw(url: string): string {
   const match = url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
-  if (!match) return url; // If not a GitHub blob link, return as is
+  if (!match) return url;
   const [, owner, repo, commit, path] = match;
   return `https://raw.githubusercontent.com/${owner}/${repo}/${commit}/${path}`;
 }
@@ -19,165 +12,125 @@ interface Props {
   events: (EventItem & { DATE: string })[];
 }
 
-// Fancy dot indicators for slideshow
-const Dot = ({ active, onClick }: { active: boolean; onClick: () => void }) => (
-  <button
-    type="button"
-    onClick={onClick}
-    className={`h-2 w-2 rounded-full mx-1 transition-all duration-200 border-none outline-none ${
-      active ? "bg-indigo-600 scale-125 shadow-lg" : "bg-gray-300"
-    }`}
-    aria-label="Show image"
-  />
-);
-
 const EventsList: React.FC<Props> = ({ events }) => {
   if (!events || events.length === 0) return <p>No events found.</p>;
-
-  // Sort so newest post (by assumed timestamp or id) is first
   const sortedEvents = [...events].reverse();
-  // Track which event is expanded (full length). Default: first (newest) expanded.
-  const [expandedIdx, setExpandedIdx] = useState(0);
+  const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {sortedEvents.map((event, idx) => {
-        // Convert all images if they are GitHub blob links
         const images = [event.IMG_1, event.IMG_2, event.IMG_3]
           .filter(Boolean)
           .map(url => url ? githubBlobToRaw(url) : "");
-        // Slideshow state: index of current image
-        const [slideIndex, setSlideIndex] = useState(0);
-        const isExpanded = expandedIdx === idx;
-
-        // Slide controls
-        const prevSlide = (e?: React.MouseEvent) => {
-          if (e) e.stopPropagation();
-          setSlideIndex(i => (i === 0 ? images.length - 1 : i - 1));
-        };
-        const nextSlide = (e?: React.MouseEvent) => {
-          if (e) e.stopPropagation();
-          setSlideIndex(i => (i === images.length - 1 ? 0 : i + 1));
-        };
-        // Auto-advance every 5s
-        React.useEffect(() => {
-          if (images.length <= 1) return;
-          const timer = setTimeout(() => setSlideIndex(i => (i === images.length - 1 ? 0 : i + 1)), 5000);
-          return () => clearTimeout(timer);
-        }, [slideIndex, images.length]);
-        // Description logic
         const fullDescription = event.DESCRIPTION ? event.DESCRIPTION.trim() : "No description";
-        const shortDescription = fullDescription.length > 120
-          ? fullDescription.slice(0, 120).split("\n")[0] + "..."
-          : fullDescription;
+        const isExpanded = expandedIdx === idx;
 
         return (
           <div
             key={idx}
-            className={`bg-white rounded-lg shadow-md overflow-hidden flex flex-col transition-all duration-300 relative ${
-              isExpanded ? "ring-2 ring-indigo-400 scale-[1.01] z-10" : ""
-            }`}
-            style={{
-              minHeight: isExpanded ? "320px" : "220px",
-              maxHeight: isExpanded ? "none" : "260px",
-              opacity: isExpanded ? 1 : 0.96,
-            }}
+            className={`
+              bg-white rounded-2xl shadow-md overflow-hidden flex flex-col relative transition
+              duration-300 ${isExpanded ? "ring-2 ring-indigo-400 scale-[1.01] z-10 shadow-xl" : "hover:shadow-lg"}
+              cursor-pointer
+            `}
             tabIndex={0}
+            style={{
+              minHeight: isExpanded ? "320px" : "210px",
+              maxHeight: isExpanded ? "none" : "260px",
+              opacity: isExpanded ? 1 : 0.98,
+              outline: "none"
+            }}
+            onClick={() => setExpandedIdx(isExpanded ? null : idx)}
+            onKeyDown={e => {
+              if (e.key === "Enter" || e.key === " ") setExpandedIdx(isExpanded ? null : idx);
+            }}
+            aria-expanded={isExpanded}
+            aria-label={isExpanded ? "Collapse event" : "Expand event"}
           >
-            {/* Image and date */}
-            <div className="h-64 w-full bg-gray-100 flex items-center justify-center relative">
-              {/* Date at top left */}
-              <span
-                className="absolute left-3 top-3 text-xs text-gray-700 font-semibold bg-white/70 px-2 py-1 rounded shadow-sm z-20"
-                style={{ pointerEvents: "none" }}
-              >
-                {event.DATE}
-              </span>
-              {images.length > 0 && images[slideIndex] ? (
-                <>
-                  <img
-                    src={images[slideIndex]}
-                    alt={`Event ${event.TITLE} image ${slideIndex + 1}`}
-                    draggable={false}
-                    onContextMenu={e => e.preventDefault()}
-                    onMouseDown={e => e.preventDefault()}
-                    style={{
-                      width: "100%",
-                      height: "16rem",
-                      objectFit: "cover",
-                      pointerEvents: "none",
-                      userSelect: "none",
-                      borderRadius: "0.5rem",
-                      boxShadow: "0 2px 8px 0 #0002",
-                      transition: "all .3s cubic-bezier(.4,2,.6,1)",
-                    }}
-                  />
-                  {images.length > 1 && isExpanded && (
-                    <>
-                      {/* Prev Button */}
-                      <button
-                        onClick={prevSlide}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full shadow p-1.5 hover:bg-indigo-500 hover:text-white text-gray-700 transition-all"
-                        style={{ zIndex: 2 }}
-                        aria-label="Previous image"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill="none" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
-                      </button>
-                      {/* Next Button */}
-                      <button
-                        onClick={nextSlide}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full shadow p-1.5 hover:bg-indigo-500 hover:text-white text-gray-700 transition-all"
-                        style={{ zIndex: 2 }}
-                        aria-label="Next image"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill="none" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
-                      </button>
-                      {/* Dots */}
-                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex z-10">
-                        {images.map((_, i) => (
-                          <Dot key={i} active={i === slideIndex} onClick={e => { e.stopPropagation(); setSlideIndex(i); }} />
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </>
+            {/* Date badge */}
+            <span
+              className="absolute left-4 top-4 text-xs font-semibold bg-white/90 px-2 py-1 rounded shadow z-10"
+              style={{ pointerEvents: "none" }}
+            >
+              {event.DATE}
+            </span>
+            {/* Image */}
+            <div className="h-48 w-full bg-gray-100 flex items-center justify-center relative">
+              {images.length > 0 && images[0] ? (
+                <img
+                  src={images[0]}
+                  alt={`Event ${event.TITLE} image 1`}
+                  className="w-full h-full object-cover rounded-t-2xl"
+                  draggable={false}
+                  onContextMenu={e => e.preventDefault()}
+                  onMouseDown={e => e.preventDefault()}
+                  style={{
+                    pointerEvents: "none",
+                    userSelect: "none",
+                  }}
+                />
               ) : (
-                <div className="h-64 w-full bg-gray-200 flex items-center justify-center text-gray-400">
+                <div className="h-48 w-full bg-gray-200 flex items-center justify-center text-gray-400">
                   <span>No image available</span>
                 </div>
               )}
             </div>
-            {/* Title and description */}
+            {/* Content */}
             <div className="p-4 text-left flex-1 flex flex-col relative">
-              <h3 className="text-xl font-semibold mb-2">{event.TITLE}</h3>
+              {/* Title */}
+              <h3 className="text-lg font-semibold mb-2 text-indigo-800">{event.TITLE}</h3>
+              {/* Description */}
               <p
-                className={`text-gray-700 whitespace-pre-line flex-1`}
-                style={{
-                  textAlign: "left",
-                  display: "-webkit-box",
-                  WebkitLineClamp: isExpanded ? "unset" : 2,
-                  WebkitBoxOrient: "vertical",
-                  overflow: isExpanded ? "visible" : "hidden",
-                  textOverflow: isExpanded ? "unset" : "ellipsis",
-                  minHeight: "2.6em",
-                }}
+                className={`
+                  text-gray-700 whitespace-pre-line flex-1 mb-2 transition-all
+                  ${isExpanded ? "" : "line-clamp-2"}
+                `}
+                style={
+                  isExpanded
+                    ? { textAlign: "left", minHeight: "2.4em" }
+                    : {
+                        textAlign: "left",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        minHeight: "2.4em",
+                        fontSize: "0.97em"
+                      }
+                }
               >
-                {isExpanded ? fullDescription : shortDescription}
+                {fullDescription}
               </p>
-              {/* Read more / Show less button */}
-              {fullDescription.length > 120 && (
+              {/* Show More / Show Less */}
+              {fullDescription.length > 60 && (
                 <button
-                  className="mt-2 text-indigo-600 font-medium hover:underline text-left"
+                  className="mt-1 px-3 py-1 border border-indigo-300 rounded-md text-indigo-700 font-medium bg-indigo-50 hover:bg-indigo-100 focus:ring-2 focus:ring-indigo-300 focus:outline-none shadow-sm transition"
                   style={{
                     position: "absolute",
-                    left: 16,
+                    left: 18,
                     bottom: 10,
+                    fontSize: "1em",
+                    cursor: "pointer",
                   }}
-                  onClick={() => setExpandedIdx(isExpanded ? -1 : idx)}
+                  tabIndex={0}
+                  onClick={e => {
+                    e.stopPropagation();
+                    setExpandedIdx(isExpanded ? null : idx);
+                  }}
+                  onKeyDown={e => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.stopPropagation();
+                      setExpandedIdx(isExpanded ? null : idx);
+                    }
+                  }}
                 >
-                  {isExpanded ? "Show less" : "Read more"}
+                  {isExpanded ? "Show less" : "Show more"}
                 </button>
               )}
+              {/* Subtle divider for pro look */}
+              {!isExpanded && <div className="absolute right-4 bottom-4 h-1 w-8 bg-indigo-100 rounded-full opacity-60" />}
             </div>
           </div>
         );
