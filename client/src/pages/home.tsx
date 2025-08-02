@@ -7,14 +7,15 @@ import ImageGallery from "@/components/image-gallery";
 //import Testimonials from "@/components/testimonials";
 
 export default function Home() {
+  // TODO: Replace this with real events loading logic
+  const events = []; // or fetch/useContext/useLoaderData, etc.
+
   return (
     <div>
       <HeroSection />
-       <EventsSlideshow />
+      <EventsSlideshow events={events} />
       <PrincipalMessage />
-    
       <ImageGallery />
-    
     </div>
   );
 }
