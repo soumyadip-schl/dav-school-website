@@ -17,11 +17,13 @@ const EventsList: React.FC<Props> = ({ events }) => {
           <div key={idx} className="bg-white rounded-lg shadow-md overflow-hidden">
             {images.length > 0 ? (
               <div className="h-64 w-full bg-gray-100 flex items-center justify-center">
-                <img
+                <iframe
                   src={images[0]}
-                  alt={`Event ${event.TITLE} image 1`}
-                  className="w-full h-64 object-cover"
-                  style={{ objectFit: "cover", maxHeight: "16rem", width: "100%" }}
+                  width="100%"
+                  height="256"
+                  allow="autoplay"
+                  style={{ border: 0 }}
+                  title={`Event ${event.TITLE} image 1`}
                 />
               </div>
             ) : (
@@ -29,7 +31,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
                 <span>No image available</span>
               </div>
             )}
-            <div className="p-4 text-center">
+            <div className="p-4 text-justify">
               <h3 className="text-xl font-semibold mb-2">{event.TITLE}</h3>
               <p className="text-gray-700 whitespace-pre-line">
                 {event.DESCRIPTION ? event.DESCRIPTION.trim() : "No description"}
