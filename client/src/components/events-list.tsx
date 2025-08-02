@@ -3,15 +3,14 @@ import type { EventItem } from "../pages/events";
 
 /**
  * Converts a GitHub blob link at a specific commit to a raw file URL.
- * Supports links of the form:
+ * Supports links like:
  * https://github.com/owner/repo/blob/commit/path/to/file.png
  * Converts to:
  * https://raw.githubusercontent.com/owner/repo/commit/path/to/file.png
  */
 function githubBlobToRaw(url: string): string {
-  // Only process github.com blob links
   const match = url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
-  if (!match) return url; // return as is if not a matching GitHub blob link
+  if (!match) return url; // If not a GitHub blob link, return as is
   const [, owner, repo, commit, path] = match;
   return `https://raw.githubusercontent.com/${owner}/${repo}/${commit}/${path}`;
 }
