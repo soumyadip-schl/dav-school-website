@@ -245,9 +245,4 @@ const EventsList: React.FC<Props> = ({ events }) => {
   );
 };
 
-export default EventsList;    })
-    </div>
-  );
-};
-
 export default EventsList;
