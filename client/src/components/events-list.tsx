@@ -13,8 +13,13 @@ interface Props {
   events: (EventItem & { DATE: string })[];
 }
 
-// Dot indicator for slideshow
-const Dot = ({ active, onClick }: { active: boolean; onClick: () => void }) => (
+const Dot = ({
+  active,
+  onClick,
+}: {
+  active: boolean;
+  onClick: () => void;
+}) => (
   <button
     type="button"
     onClick={onClick}
@@ -26,35 +31,39 @@ const Dot = ({ active, onClick }: { active: boolean; onClick: () => void }) => (
   />
 );
 
-// Clamp description for minimized mode (add "....." only if trimmed, supports multi-paragraph for expanded)
-function clampDescription(desc: string, maxChars = 120): string {
+// Get description up to the last full stop (.)
+function descriptionToLastFullStop(desc: string): string {
   if (!desc) return "";
-  // Remove line breaks for clamped preview
-  let flat = desc.replace(/\n+/g, " ");
-  if (flat.length > maxChars) return flat.slice(0, maxChars).replace(/\s+$/, "") + ".....";
-  return flat;
+  const lastDot = desc.lastIndexOf(".");
+  return lastDot !== -1 ? desc.slice(0, lastDot + 1) : desc;
 }
 
 const EventsList: React.FC<Props> = ({ events }) => {
-  if (!Array.isArray(events) || events.length === 0) return <p>No events found.</p>;
+  if (!Array.isArray(events) || events.length === 0)
+    return <p>No events found.</p>;
 
   // Defensive: Remove undefined/null/invalid events
-  const sortedEvents = events.filter(e => e && e.TITLE && e.DATE).reverse();
-  const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
+  const sortedEvents = events
+    .filter((e) => e && e.TITLE && e.DATE)
+    .reverse();
 
   // Slideshow index per card, always keep state (never re-key cards)
-  const [slideIndexes, setSlideIndexes] = useState<{ [key: number]: number }>({});
+  const [slideIndexes, setSlideIndexes] = useState<{ [key: number]: number }>(
+    {}
+  );
 
   // Utility to check if slideshow is valid
   const getValidImages = (event: any): string[] => {
     const imgs = [event.IMG_1, event.IMG_2, event.IMG_3]
       .filter(Boolean)
-      .map(url => (typeof url === "string" ? githubBlobToRaw(url) : ""));
+      .map((url) =>
+        typeof url === "string" ? githubBlobToRaw(url) : ""
+      );
     return imgs.length > 0 ? imgs : [""];
   };
 
   const handlePrevSlide = (idx: number, images: string[]) => {
-    setSlideIndexes(prev => ({
+    setSlideIndexes((prev) => ({
       ...prev,
       [idx]:
         prev[idx] === undefined
@@ -66,7 +75,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
   };
 
   const handleNextSlide = (idx: number, images: string[]) => {
-    setSlideIndexes(prev => ({
+    setSlideIndexes((prev) => ({
       ...prev,
       [idx]:
         prev[idx] === undefined
@@ -79,38 +88,29 @@ const EventsList: React.FC<Props> = ({ events }) => {
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {sortedEvents.map((event, idx) => {
         // Defensive event fields
-        const title = typeof event.TITLE === "string" ? event.TITLE : "Untitled";
+        const title =
+          typeof event.TITLE === "string" ? event.TITLE : "Untitled";
         const date = typeof event.DATE === "string" ? event.DATE : "";
         const description =
           typeof event.DESCRIPTION === "string" && event.DESCRIPTION.trim()
             ? event.DESCRIPTION.trim()
             : "No description";
-
         const images = getValidImages(event);
-        const isExpanded = expandedIdx === idx;
         const slideIndex = slideIndexes[idx] ?? 0;
-        const needsShowMore = description.replace(/\n+/g, " ").length > 120;
-
-        // Description
-        const displayDescription = isExpanded
-          ? description // Expanded: preserve paragraphs
-          : clampDescription(description);
+        const displayDescription = descriptionToLastFullStop(description);
 
         return (
           <div
             key={title + "_" + date + "_" + idx}
             className={`
               bg-white rounded-2xl shadow-md overflow-hidden flex flex-col relative transition
-              duration-300 ${isExpanded ? "ring-2 ring-indigo-400 scale-[1.01] z-10 shadow-xl" : "hover:shadow-lg"}
+              duration-300 hover:shadow-lg
             `}
             tabIndex={0}
             style={{
-              minHeight: isExpanded ? "340px" : "250px",
-              maxHeight: isExpanded ? "none" : "290px",
-              outline: "none"
+              minHeight: "250px",
+              outline: "none",
             }}
-            aria-expanded={isExpanded}
-            aria-label={isExpanded ? "Collapse event" : "Expand event"}
           >
             {/* Date badge */}
             {date && (
@@ -130,13 +130,13 @@ const EventsList: React.FC<Props> = ({ events }) => {
                     alt={`Event ${title} image ${slideIndex + 1}`}
                     className="w-full h-full object-cover rounded-t-2xl"
                     draggable={false}
-                    onContextMenu={e => e.preventDefault()}
-                    onMouseDown={e => e.preventDefault()}
+                    onContextMenu={(e) => e.preventDefault()}
+                    onMouseDown={(e) => e.preventDefault()}
                     style={{
                       pointerEvents: "none",
                       userSelect: "none",
                     }}
-                    onError={e => {
+                    onError={(e) => {
                       (e.target as HTMLImageElement).src =
                         "https://via.placeholder.com/600x300?text=Image+not+found";
                     }}
@@ -144,7 +144,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
                   {images.length > 1 && (
                     <>
                       <button
-                        onClick={e => {
+                        onClick={(e) => {
                           e.stopPropagation();
                           handlePrevSlide(idx, images);
                         }}
@@ -153,10 +153,24 @@ const EventsList: React.FC<Props> = ({ events }) => {
                         aria-label="Previous image"
                         tabIndex={0}
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill="none" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={18}
+                          height={18}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M15 6l-6 6 6 6"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
                       </button>
                       <button
-                        onClick={e => {
+                        onClick={(e) => {
                           e.stopPropagation();
                           handleNextSlide(idx, images);
                         }}
@@ -165,16 +179,33 @@ const EventsList: React.FC<Props> = ({ events }) => {
                         aria-label="Next image"
                         tabIndex={0}
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill="none" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={18}
+                          height={18}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M9 18l6-6-6-6"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
                       </button>
                       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex z-10">
                         {images.map((_, i) => (
                           <Dot
                             key={i}
                             active={i === slideIndex}
-                            onClick={e => {
+                            onClick={(e) => {
                               e.stopPropagation();
-                              setSlideIndexes(sl => ({ ...sl, [idx]: i }));
+                              setSlideIndexes((sl) => ({
+                                ...sl,
+                                [idx]: i,
+                              }));
                             }}
                           />
                         ))}
@@ -191,57 +222,30 @@ const EventsList: React.FC<Props> = ({ events }) => {
             {/* Content */}
             <div className="p-4 text-left flex-1 flex flex-col relative">
               {/* Title */}
-              <h3 className="text-lg font-bold mb-2 text-black break-words">{title}</h3>
+              <h3 className="text-lg font-bold mb-2 text-black break-words">
+                {title}
+              </h3>
               {/* Description */}
-              {isExpanded ? (
-                <div
-                  className="text-gray-600 flex-1 mb-2 transition-all whitespace-pre-line"
-                  style={{
-                    textAlign: "left",
-                    minHeight: "2.4em",
-                    fontSize: "1em"
-                  }}
-                >
-                  {displayDescription}
-                </div>
-              ) : (
-                <p
-                  className="text-gray-600 flex-1 mb-2 transition-all line-clamp-2"
-                  style={{
-                    textAlign: "left",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    fontSize: "1em"
-                  }}
-                  title={description}
-                >
-                  {displayDescription}
-                </p>
-              )}
-              {/* Spacer to push button down */}
-              <div className="flex-1" />
-              {/* Show More / Show Less */}
-              {needsShowMore && (
-                <div className="flex justify-start mt-4">
-                  <button
-                    className="px-4 py-1 border border-indigo-300 rounded-md text-indigo-700 font-medium bg-indigo-50 hover:bg-indigo-100 focus:ring-2 focus:ring-indigo-300 focus:outline-none shadow-sm transition"
-                    onClick={e => {
-                      e.stopPropagation();
-                      setExpandedIdx(isExpanded ? null : idx);
-                    }}
-                    tabIndex={0}
-                  >
-                    {isExpanded ? "Show less" : "Show more"}
-                  </button>
-                </div>
-              )}
+              <p
+                className="text-gray-600 flex-1 mb-2 transition-all"
+                style={{
+                  textAlign: "left",
+                  fontSize: "1em",
+                  whiteSpace: "pre-line",
+                }}
+                title={description}
+              >
+                {displayDescription}
+              </p>
             </div>
           </div>
         );
       })}
+    </div>
+  );
+};
+
+export default EventsList;    })}
     </div>
   );
 };
