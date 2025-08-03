@@ -42,7 +42,7 @@ export default function About() {
           
           <div>
             <img
-              src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=400"
+              src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/a37e9d0da73b988bc57f2c7b904f1af1522e48c7/attached_assets/Message_a4213de2-8768-4736-bc67-9ce7edc51b2e_school-building2.jpg"
               alt="School building"
               className="rounded-xl shadow-lg w-full h-auto mb-6"
             />
