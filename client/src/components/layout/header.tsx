@@ -10,17 +10,23 @@ export default function Header() {
     { label: "About", href: "/about" },
     { label: "Academics", href: "/academics" },
     { label: "Admissions", href: "/admissions" },
-    { label: "News", href: "/news" },      // <-- Added News
-    { label: "Events", href: "/events" },  // <-- Added Events
+    { label: "Info", href: "/info" }, // changed from News to Info
+    { label: "Events", href: "/events" },
     { label: "Gallery", href: "/gallery" },
-    { label: "Contact", href: "/contact" }
+    { label: "Contact", href: "/contact" },
+    // External link for E-Library; render separately below
+  ];
+  const externalNavItems = [
+    { label: "E-Library", href: "https://elibrary.davcmc.net/", external: true }
   ];
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* First Row: Logo and Title */}
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -37,25 +43,6 @@ export default function Header() {
               </Link>
             </div>
           </div>
-          
-          {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
-              {navItems.map((item) => (
-                <Link key={item.href} href={item.href}>
-                  <span className={cn(
-                    "px-3 py-2 font-medium transition-colors cursor-pointer",
-                    location === item.href 
-                      ? "text-dav-maroon" 
-                      : "text-gray-700 hover:text-dav-saffron"
-                  )}>
-                    {item.label}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </div>
-          
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button 
@@ -63,7 +50,6 @@ export default function Header() {
               onClick={toggleMobileMenu}
               aria-label="Open menu"
             >
-              {/* Use an accessible menu icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -77,8 +63,60 @@ export default function Header() {
             </button>
           </div>
         </div>
+        {/* Second Row: Desktop Menu & Thin Line for Mobile */}
+        <div>
+          <div className="hidden md:block border-t border-b-0">
+            <div className="flex items-center ml-0 space-x-8 h-12"
+                 style={{ background: "transparent" }}>
+              {navItems.map((item) => (
+                <Link key={item.href} href={item.href}>
+                  <span className={cn(
+                    "px-3 py-2 font-medium transition-colors cursor-pointer text-dav-maroon",
+                    location === item.href
+                      ? "underline underline-offset-4"
+                      : "hover:text-dav-saffron"
+                  )}>
+                    {item.label}
+                  </span>
+                </Link>
+              ))}
+              {/* External E-Library link */}
+              {externalNavItems.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-2 font-medium transition-colors cursor-pointer text-dav-maroon hover:text-dav-saffron"
+                >
+                  {item.label}
+                  <span className="ml-1 align-middle" aria-label="(opens in a new tab)">
+                    {/* External link icon */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="inline h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M10 5a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 11-2 0V7.414l-9.293 9.293a1 1 0 01-1.414-1.414L15.586 6H11a1 1 0 01-1-1z" />
+                    </svg>
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+          {/* Thin second row for mobile, just a line */}
+          <div className="md:hidden">
+            <div
+              className="w-full"
+              style={{
+                height: "3px",
+                backgroundColor: "#861d1d" // same as text-dav-maroon
+              }}
+            />
+          </div>
+        </div>
       </div>
-      
       {/* Mobile Navigation */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t shadow">
@@ -97,6 +135,29 @@ export default function Header() {
                   {item.label}
                 </span>
               </Link>
+            ))}
+            {/* External E-Library link in mobile menu */}
+            {externalNavItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block px-3 py-2 cursor-pointer rounded transition-colors text-dav-maroon hover:text-dav-saffron"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {item.label}
+                <span className="ml-1 align-middle" aria-label="(opens in a new tab)">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="inline h-4 w-4"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path d="M10 5a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 11-2 0V7.414l-9.293 9.293a1 1 0 01-1.414-1.414L15.586 6H11a1 1 0 01-1-1z" />
+                  </svg>
+                </span>
+              </a>
             ))}
           </div>
         </div>
