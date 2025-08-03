@@ -37,6 +37,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
   if (!events || events.length === 0) return <p>No events found.</p>;
   const sortedEvents = [...events].reverse();
   const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
+  // Ensure slideshow is always controlled per card, and not lost on expand/collapse.
   const [slideIndexes, setSlideIndexes] = useState<{ [key: number]: number }>({});
 
   const handlePrevSlide = (idx: number, images: string[]) => {
@@ -61,6 +62,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
     }));
   };
 
+  // Fix: Always keep slideshow state, never re-key or remount cards!
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {sortedEvents.map((event, idx) => {
@@ -73,13 +75,15 @@ const EventsList: React.FC<Props> = ({ events }) => {
         // Slide index per card
         const slideIndex = slideIndexes[idx] ?? 0;
         const needsShowMore = fullDescription.length > 120;
+
+        // For minimized: clamp visually, and add "....." at the end
         const displayDescription = isExpanded
           ? fullDescription
           : clampDescription(fullDescription);
 
         return (
           <div
-            key={idx}
+            key={event.TITLE + "_" + idx} // Stable key is important!
             className={`
               bg-white rounded-2xl shadow-md overflow-hidden flex flex-col relative transition
               duration-300 ${isExpanded ? "ring-2 ring-indigo-400 scale-[1.01] z-10 shadow-xl" : "hover:shadow-lg"}
@@ -155,13 +159,11 @@ const EventsList: React.FC<Props> = ({ events }) => {
               {/* Title */}
               <h3 className="text-lg font-bold mb-2 text-black">{event.TITLE}</h3>
               {/* Description */}
-              <p
-                className={`text-gray-600 flex-1 mb-2 transition-all ${
-                  isExpanded ? "" : "line-clamp-2"
-                }`}
+              <div
+                className={`text-gray-600 flex-1 mb-2 transition-all`}
                 style={
                   isExpanded
-                    ? { textAlign: "left", minHeight: "2.4em" }
+                    ? { textAlign: "left", whiteSpace: "pre-line", fontSize: "1em", minHeight: "2.4em" }
                     : {
                         textAlign: "left",
                         display: "-webkit-box",
@@ -169,12 +171,14 @@ const EventsList: React.FC<Props> = ({ events }) => {
                         WebkitBoxOrient: "vertical",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
-                        fontSize: "1em"
+                        minHeight: "2.4em",
+                        fontSize: "1em",
+                        whiteSpace: "pre-line",
                       }
                 }
               >
                 {displayDescription}
-              </p>
+              </div>
               {/* Spacer to push button down */}
               <div className="flex-1" />
               {/* Show More / Show Less */}
