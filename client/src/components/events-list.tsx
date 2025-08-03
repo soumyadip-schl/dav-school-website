@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import type { EventItem } from "../pages/events";
 
+// Convert GitHub "blob" urls to "raw" for image serving
 function githubBlobToRaw(url: string): string {
   const match = url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
   if (!match) return url;
@@ -8,13 +9,17 @@ function githubBlobToRaw(url: string): string {
   return `https://raw.githubusercontent.com/${owner}/${repo}/${commit}/${path}`;
 }
 
+// Clamp description to max characters with ellipsis
 function clampText(text: string, max = 120) {
-  return text.length > max ? text.slice(0, max).replace(/\s+$/, "") + "....." : text;
+  if (!text) return "";
+  return text.length > max ? text.slice(0, max).replace(/\s+$/, '') + " ....." : text;
 }
 
 interface Props {
   events: (EventItem & { DATE: string })[];
 }
+
+const AUTO_SLIDE_INTERVAL = 4000; // ms
 
 const EventsList: React.FC<Props> = ({ events }) => {
   const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
@@ -27,6 +32,19 @@ const EventsList: React.FC<Props> = ({ events }) => {
       Object.values(timers.current).forEach(t => clearTimeout(t));
     };
   }, []);
+
+  // Autoplay for slides
+  const resetAutoSlide = (idx: number, images: string[]) => {
+    if (timers.current[idx]) clearTimeout(timers.current[idx]);
+    if (images.length <= 1) return;
+    timers.current[idx] = setTimeout(() => {
+      setSlideIndexes(prev => ({
+        ...prev,
+        [idx]: ((prev[idx] ?? 0) + 1) % images.length,
+      }));
+      resetAutoSlide(idx, images);
+    }, AUTO_SLIDE_INTERVAL);
+  };
 
   const handlePrevSlide = (idx: number, images: string[]) => {
     setSlideIndexes(prev => ({
@@ -44,60 +62,33 @@ const EventsList: React.FC<Props> = ({ events }) => {
   const handleNextSlide = (idx: number, images: string[]) => {
     setSlideIndexes(prev => ({
       ...prev,
-      [idx]:
-        prev[idx] === undefined
-          ? 1 % images.length
-          : (prev[idx] + 1) % images.length,
+      [idx]: prev[idx] === undefined ? 1 % images.length : (prev[idx] + 1) % images.length,
     }));
     resetAutoSlide(idx, images);
   };
 
-  // Automatic slideshow
-  const resetAutoSlide = (idx: number, images: string[]) => {
-    if (timers.current[idx]) clearTimeout(timers.current[idx]);
-    timers.current[idx] = setTimeout(() => {
-      setSlideIndexes(prev => ({
-        ...prev,
-        [idx]:
-          prev[idx] === undefined
-            ? 1 % images.length
-            : (prev[idx] + 1) % images.length,
-      }));
-    }, 4000);
-  };
+  if (!events || events.length === 0) return <p>No events found.</p>;
 
-  useEffect(() => {
-    // For each card, set up auto-slide
-    events.forEach((event, idx) => {
-      const images = [event.IMG_1, event.IMG_2, event.IMG_3].filter(Boolean).map(githubBlobToRaw);
-      if (images.length > 1) {
-        if (timers.current[idx]) clearTimeout(timers.current[idx]);
-        timers.current[idx] = setTimeout(() => {
-          setSlideIndexes(prev => ({
-            ...prev,
-            [idx]:
-              prev[idx] === undefined
-                ? 1 % images.length
-                : (prev[idx] + 1) % images.length,
-          }));
-        }, 4000);
-      }
-    });
-    return () => {
-      Object.values(timers.current).forEach(t => clearTimeout(t));
-    };
-    // eslint-disable-next-line
-  }, [events, slideIndexes]);
+  const sortedEvents = [...events].reverse();
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {events.map((event, idx) => {
+      {sortedEvents.map((event, idx) => {
         const images = [event.IMG_1, event.IMG_2, event.IMG_3].filter(Boolean).map(githubBlobToRaw);
         const fullDescription = event.DESCRIPTION ? event.DESCRIPTION.trim() : "No description";
         const isExpanded = expandedIdx === idx;
-        const needsShowMore = fullDescription.length > 120;
-
+        // Always show the button
+        const needsShowMore = true;
         const slideIndex = slideIndexes[idx] ?? 0;
+
+        // Start auto-slide for this card
+        useEffect(() => {
+          if (images.length > 1 && !isExpanded) resetAutoSlide(idx, images);
+          return () => {
+            if (timers.current[idx]) clearTimeout(timers.current[idx]);
+          };
+          // eslint-disable-next-line
+        }, [images.length, isExpanded]);
 
         return (
           <div
@@ -110,9 +101,10 @@ const EventsList: React.FC<Props> = ({ events }) => {
               minHeight: isExpanded ? "340px" : "250px",
               maxHeight: isExpanded ? "none" : "290px",
               opacity: isExpanded ? 1 : 0.98,
-              outline: "none",
+              outline: "none"
             }}
             aria-expanded={isExpanded}
+            aria-label={isExpanded ? "Collapse event" : "Expand event"}
           >
             {/* Date badge */}
             <span className="absolute left-4 top-4 text-xs font-semibold bg-white/90 px-2 py-1 rounded shadow z-10" style={{ pointerEvents: "none" }}>
@@ -159,9 +151,9 @@ const EventsList: React.FC<Props> = ({ events }) => {
                           <button
                             key={i}
                             type="button"
+                            aria-label={`Show image ${i + 1}`}
                             className={`h-2 w-2 rounded-full mx-1 border-none outline-none transition-all duration-200 ${i === slideIndex ? "bg-indigo-600 scale-125 shadow-lg" : "bg-gray-300"}`}
                             onClick={e => { e.stopPropagation(); setSlideIndexes(sl => ({ ...sl, [idx]: i })); resetAutoSlide(idx, images); }}
-                            aria-label={`Show image ${i + 1}`}
                           />
                         ))}
                       </div>
