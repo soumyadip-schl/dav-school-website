@@ -10,11 +10,10 @@ export default function Header() {
     { label: "About", href: "/about" },
     { label: "Academics", href: "/academics" },
     { label: "Admissions", href: "/admissions" },
-    { label: "Info", href: "/info" }, // changed from News to Info
+    { label: "Info", href: "/info" },
     { label: "Events", href: "/events" },
     { label: "Gallery", href: "/gallery" },
     { label: "Contact", href: "/contact" },
-    // External link for E-Library; render separately below
   ];
   const externalNavItems = [
     { label: "E-Library", href: "https://elibrary.davcmc.net/", external: true }
@@ -26,6 +25,7 @@ export default function Header() {
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
         {/* First Row: Logo and Title */}
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
@@ -63,15 +63,16 @@ export default function Header() {
             </button>
           </div>
         </div>
+
         {/* Second Row: Desktop Menu & Thin Line for Mobile */}
         <div>
-          <div className="hidden md:block border-t border-b-0">
-            <div className="flex items-center ml-0 space-x-8 h-12"
-                 style={{ background: "transparent" }}>
+          {/* Desktop: Properly fitted maroon background nav row */}
+          <div className="hidden md:flex w-full bg-dav-maroon items-center h-12 px-2">
+            <div className="flex items-center space-x-6 w-full justify-center">
               {navItems.map((item) => (
                 <Link key={item.href} href={item.href}>
                   <span className={cn(
-                    "px-3 py-2 font-medium transition-colors cursor-pointer text-dav-maroon",
+                    "px-2 py-2 font-medium transition-colors cursor-pointer text-white",
                     location === item.href
                       ? "underline underline-offset-4"
                       : "hover:text-dav-saffron"
@@ -87,11 +88,10 @@ export default function Header() {
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-2 font-medium transition-colors cursor-pointer text-dav-maroon hover:text-dav-saffron"
+                  className="px-2 py-2 font-medium transition-colors cursor-pointer text-white hover:text-dav-saffron"
                 >
                   {item.label}
                   <span className="ml-1 align-middle" aria-label="(opens in a new tab)">
-                    {/* External link icon */}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="inline h-4 w-4"
@@ -105,7 +105,7 @@ export default function Header() {
               ))}
             </div>
           </div>
-          {/* Thin second row for mobile, just a line */}
+          {/* Thin maroon line for mobile */}
           <div className="md:hidden">
             <div
               className="w-full"
