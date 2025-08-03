@@ -12,6 +12,11 @@ interface Props {
   events: (EventItem & { DATE: string })[];
 }
 
+// Utility to check if text overflows two lines (approx. 120 chars as a fallback for JS)
+function needsShowMore(description: string) {
+  return description && description.length > 120;
+}
+
 const EventsList: React.FC<Props> = ({ events }) => {
   if (!events || events.length === 0) return <p>No events found.</p>;
   const sortedEvents = [...events].reverse();
@@ -32,18 +37,13 @@ const EventsList: React.FC<Props> = ({ events }) => {
             className={`
               bg-white rounded-2xl shadow-md overflow-hidden flex flex-col relative transition
               duration-300 ${isExpanded ? "ring-2 ring-indigo-400 scale-[1.01] z-10 shadow-xl" : "hover:shadow-lg"}
-              cursor-pointer
             `}
             tabIndex={0}
             style={{
-              minHeight: isExpanded ? "320px" : "210px",
-              maxHeight: isExpanded ? "none" : "260px",
+              minHeight: isExpanded ? "320px" : "230px",
+              maxHeight: isExpanded ? "none" : "270px",
               opacity: isExpanded ? 1 : 0.98,
               outline: "none"
-            }}
-            onClick={() => setExpandedIdx(isExpanded ? null : idx)}
-            onKeyDown={e => {
-              if (e.key === "Enter" || e.key === " ") setExpandedIdx(isExpanded ? null : idx);
             }}
             aria-expanded={isExpanded}
             aria-label={isExpanded ? "Collapse event" : "Expand event"}
@@ -103,34 +103,23 @@ const EventsList: React.FC<Props> = ({ events }) => {
               >
                 {fullDescription}
               </p>
+              {/* Extra space to push button to bottom */}
+              <div className="flex-1" />
               {/* Show More / Show Less */}
-              {fullDescription.length > 60 && (
-                <button
-                  className="mt-1 px-3 py-1 border border-indigo-300 rounded-md text-indigo-700 font-medium bg-indigo-50 hover:bg-indigo-100 focus:ring-2 focus:ring-indigo-300 focus:outline-none shadow-sm transition"
-                  style={{
-                    position: "absolute",
-                    left: 18,
-                    bottom: 10,
-                    fontSize: "1em",
-                    cursor: "pointer",
-                  }}
-                  tabIndex={0}
-                  onClick={e => {
-                    e.stopPropagation();
-                    setExpandedIdx(isExpanded ? null : idx);
-                  }}
-                  onKeyDown={e => {
-                    if (e.key === "Enter" || e.key === " ") {
+              {needsShowMore(fullDescription) && (
+                <div className="flex justify-start mt-4">
+                  <button
+                    className="px-4 py-1 border border-indigo-300 rounded-md text-indigo-700 font-medium bg-indigo-50 hover:bg-indigo-100 focus:ring-2 focus:ring-indigo-300 focus:outline-none shadow-sm transition"
+                    onClick={e => {
                       e.stopPropagation();
                       setExpandedIdx(isExpanded ? null : idx);
-                    }
-                  }}
-                >
-                  {isExpanded ? "Show less" : "Show more"}
-                </button>
+                    }}
+                    tabIndex={0}
+                  >
+                    {isExpanded ? "Show less" : "Show more"}
+                  </button>
+                </div>
               )}
-              {/* Subtle divider for pro look */}
-              {!isExpanded && <div className="absolute right-4 bottom-4 h-1 w-8 bg-indigo-100 rounded-full opacity-60" />}
             </div>
           </div>
         );
