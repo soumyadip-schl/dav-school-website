@@ -12,15 +12,50 @@ interface Props {
   events: (EventItem & { DATE: string })[];
 }
 
-// Utility to check if text overflows two lines (approx. 120 chars as a fallback for JS)
-function needsShowMore(description: string) {
-  return description && description.length > 120;
-}
+const Dot = ({ active, onClick }: { active: boolean; onClick: () => void }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={`h-2 w-2 rounded-full mx-1 transition-all duration-200 border-none outline-none ${
+      active ? "bg-indigo-600 scale-125 shadow-lg" : "bg-gray-300"
+    }`}
+    aria-label="Show image"
+  />
+);
+
+const clampDescription = (desc: string) => {
+  // This is only for fallback if you want to cut after ~2 lines, webkit clamp is used for display.
+  if (!desc) return "";
+  if (desc.length > 120) return desc.slice(0, 120).replace(/\s+$/, '') + ".....";
+  return desc;
+};
 
 const EventsList: React.FC<Props> = ({ events }) => {
   if (!events || events.length === 0) return <p>No events found.</p>;
   const sortedEvents = [...events].reverse();
   const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
+  const [slideIndexes, setSlideIndexes] = useState<{ [key: number]: number }>({});
+
+  const handlePrevSlide = (idx: number, images: string[]) => {
+    setSlideIndexes((prev) => ({
+      ...prev,
+      [idx]: prev[idx] === undefined
+        ? images.length - 1
+        : prev[idx] === 0
+        ? images.length - 1
+        : prev[idx] - 1,
+    }));
+  };
+
+  const handleNextSlide = (idx: number, images: string[]) => {
+    setSlideIndexes((prev) => ({
+      ...prev,
+      [idx]:
+        prev[idx] === undefined
+          ? 1 % images.length
+          : (prev[idx] + 1) % images.length,
+    }));
+  };
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -31,6 +66,17 @@ const EventsList: React.FC<Props> = ({ events }) => {
         const fullDescription = event.DESCRIPTION ? event.DESCRIPTION.trim() : "No description";
         const isExpanded = expandedIdx === idx;
 
+        // Slide index per card
+        const slideIndex = slideIndexes[idx] ?? 0;
+
+        // Show more if desc > 120 chars (approx two lines)
+        const needsShowMore = fullDescription.length > 120;
+
+        // For minimized: clamp visually, and add "....." at the end
+        const displayDescription = isExpanded
+          ? fullDescription
+          : clampDescription(fullDescription);
+
         return (
           <div
             key={idx}
@@ -40,8 +86,8 @@ const EventsList: React.FC<Props> = ({ events }) => {
             `}
             tabIndex={0}
             style={{
-              minHeight: isExpanded ? "320px" : "230px",
-              maxHeight: isExpanded ? "none" : "270px",
+              minHeight: isExpanded ? "340px" : "250px",
+              maxHeight: isExpanded ? "none" : "290px",
               opacity: isExpanded ? 1 : 0.98,
               outline: "none"
             }}
@@ -55,21 +101,50 @@ const EventsList: React.FC<Props> = ({ events }) => {
             >
               {event.DATE}
             </span>
-            {/* Image */}
+            {/* Image with slideshow */}
             <div className="h-48 w-full bg-gray-100 flex items-center justify-center relative">
-              {images.length > 0 && images[0] ? (
-                <img
-                  src={images[0]}
-                  alt={`Event ${event.TITLE} image 1`}
-                  className="w-full h-full object-cover rounded-t-2xl"
-                  draggable={false}
-                  onContextMenu={e => e.preventDefault()}
-                  onMouseDown={e => e.preventDefault()}
-                  style={{
-                    pointerEvents: "none",
-                    userSelect: "none",
-                  }}
-                />
+              {images.length > 0 && images[slideIndex] ? (
+                <>
+                  <img
+                    src={images[slideIndex]}
+                    alt={`Event ${event.TITLE} image ${slideIndex + 1}`}
+                    className="w-full h-full object-cover rounded-t-2xl"
+                    draggable={false}
+                    onContextMenu={e => e.preventDefault()}
+                    onMouseDown={e => e.preventDefault()}
+                    style={{
+                      pointerEvents: "none",
+                      userSelect: "none",
+                    }}
+                  />
+                  {images.length > 1 && (
+                    <>
+                      <button
+                        onClick={e => { e.stopPropagation(); handlePrevSlide(idx, images); }}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full shadow p-1.5 hover:bg-indigo-500 hover:text-white text-gray-700 transition-all"
+                        style={{ zIndex: 2 }}
+                        aria-label="Previous image"
+                        tabIndex={0}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill="none" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </button>
+                      <button
+                        onClick={e => { e.stopPropagation(); handleNextSlide(idx, images); }}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full shadow p-1.5 hover:bg-indigo-500 hover:text-white text-gray-700 transition-all"
+                        style={{ zIndex: 2 }}
+                        aria-label="Next image"
+                        tabIndex={0}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill="none" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </button>
+                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex z-10">
+                        {images.map((_, i) => (
+                          <Dot key={i} active={i === slideIndex} onClick={e => { e.stopPropagation(); setSlideIndexes(sl => ({ ...sl, [idx]: i })); }} />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </>
               ) : (
                 <div className="h-48 w-full bg-gray-200 flex items-center justify-center text-gray-400">
                   <span>No image available</span>
@@ -79,11 +154,11 @@ const EventsList: React.FC<Props> = ({ events }) => {
             {/* Content */}
             <div className="p-4 text-left flex-1 flex flex-col relative">
               {/* Title */}
-              <h3 className="text-lg font-semibold mb-2 text-indigo-800">{event.TITLE}</h3>
+              <h3 className="text-lg font-semibold mb-2 text-black">{event.TITLE}</h3>
               {/* Description */}
               <p
                 className={`
-                  text-gray-700 whitespace-pre-line flex-1 mb-2 transition-all
+                  text-gray-700 flex-1 mb-2 transition-all
                   ${isExpanded ? "" : "line-clamp-2"}
                 `}
                 style={
@@ -101,12 +176,12 @@ const EventsList: React.FC<Props> = ({ events }) => {
                       }
                 }
               >
-                {fullDescription}
+                {displayDescription}
               </p>
               {/* Extra space to push button to bottom */}
               <div className="flex-1" />
               {/* Show More / Show Less */}
-              {needsShowMore(fullDescription) && (
+              {needsShowMore && (
                 <div className="flex justify-start mt-4">
                   <button
                     className="px-4 py-1 border border-indigo-300 rounded-md text-indigo-700 font-medium bg-indigo-50 hover:bg-indigo-100 focus:ring-2 focus:ring-indigo-300 focus:outline-none shadow-sm transition"
