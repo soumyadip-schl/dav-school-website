@@ -38,7 +38,7 @@ export default function Home() {
       {loading ? (
         <p className="text-center text-gray-600">Loading events...</p>
       ) : (
-        <EventsSlideshow events={events.slice(0, 5)} />
+        <EventsSlideshow events={events.slice(0, 5)} eventPageBasePath="/events" />
       )}
       <PrincipalMessage />
       <ImageGallery />
