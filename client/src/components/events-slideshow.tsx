@@ -12,6 +12,14 @@ interface EventsSlideshowProps {
 
 const SLIDE_INTERVAL = 4000; // 4 seconds
 
+// Converts GitHub blob to raw
+function githubBlobToRaw(url: string): string {
+  const match = url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
+  if (!match) return url;
+  const [, owner, repo, commit, path] = match;
+  return `https://raw.githubusercontent.com/${owner}/${repo}/${commit}/${path}`;
+}
+
 const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
   events,
   eventPageBasePath = "/events"
@@ -35,26 +43,26 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
 
   // Helper to get event images
   function getValidImages(event: EventItem & { DATE: string }): string[] {
-    return [event.IMG_1, event.IMG_2, event.IMG_3].filter(Boolean) as string[];
+    return [event.IMG_1, event.IMG_2, event.IMG_3]
+      .filter(Boolean)
+      .map((url) => typeof url === "string" ? githubBlobToRaw(url) : "");
   }
 
   // Render a visually distinct card that navigates to /events
   function renderEventCard(event: EventItem & { DATE: string }, idx: number) {
     const images = getValidImages(event);
-    const fullDescription = event.DESCRIPTION ? event.DESCRIPTION.trim() : "No description";
-    const shortDescription =
-      fullDescription.length > 110 ? fullDescription.slice(0, 110) + "..." : fullDescription;
+    const displayDescription = event.DESCRIPTION ? event.DESCRIPTION.trim() : "No description";
 
     return (
       <div
-        className="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-2xl shadow-lg overflow-hidden flex flex-col relative transition-all duration-300 cursor-pointer hover:shadow-2xl"
+        className="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-2xl shadow-lg overflow-hidden flex flex-col relative transition-all duration-300 cursor-pointer hover:shadow-xl"
         style={{
           minHeight: "170px",
           maxHeight: "220px",
           margin: "0 8px",
-          width: "320px"
+          width: "320px",
+          position: "relative"
         }}
-        onClick={() => window.location.assign(eventPageBasePath)}
         role="button"
         tabIndex={0}
         aria-label={`Go to events page`}
@@ -86,7 +94,7 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
         <div className="p-4 text-left flex-1 flex flex-col relative">
           <h3 className="text-lg font-bold mb-1 text-indigo-900">{event.TITLE}</h3>
           <p className="text-gray-700 text-sm whitespace-pre-line flex-1" style={{ textAlign: "left" }}>
-            {shortDescription}
+            {displayDescription}
           </p>
           <span
             className="absolute left-3 bottom-3 text-xs text-indigo-700 font-medium bg-white/90 px-2 py-0.5 rounded shadow"
@@ -98,6 +106,19 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
             See all events →
           </span>
         </div>
+        {/* Overlay link to events page */}
+        <a
+          href={eventPageBasePath}
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: 0,
+            zIndex: 40,
+            cursor: "pointer",
+          }}
+          tabIndex={-1}
+          aria-label="Go to events page"
+        />
       </div>
     );
   }
