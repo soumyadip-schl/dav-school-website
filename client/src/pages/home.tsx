@@ -18,11 +18,9 @@ export default function Home() {
         const filteredEvents = Array.isArray(data.events)
           ? data.events.filter((e) => e && e.TITLE && e.DATE)
           : [];
-        // Sort by date descending (latest first)
-        const sortedEvents = filteredEvents.sort(
-          (a, b) => new Date(b.DATE).getTime() - new Date(a.DATE).getTime()
-        );
-        setEvents(sortedEvents);
+        // Reverse the array then take the first 5
+        const reversedEvents = [...filteredEvents].reverse();
+        setEvents(reversedEvents);
       } catch (err) {
         setEvents([]);
       } finally {
@@ -35,11 +33,13 @@ export default function Home() {
   return (
     <div>
       <HeroSection />
-      {loading ? (
-        <p className="text-center text-gray-600">Loading events...</p>
-      ) : (
-        <EventsSlideshow events={events.slice(0, 5)} eventPageBasePath="/events" />
-      )}
+      <div className="mt-8">
+        {loading ? (
+          <p className="text-center text-gray-600">Loading events...</p>
+        ) : (
+          <EventsSlideshow events={events.slice(0, 5)} eventPageBasePath="/events" />
+        )}
+      </div>
       <PrincipalMessage />
       <ImageGallery />
     </div>
