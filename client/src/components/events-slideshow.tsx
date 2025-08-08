@@ -1,10 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { EventItem } from "../pages/events";
 
-/**
- * Props for EventsSlideshow.
- * - events: Array of events, already sorted and formatted as in EventsList.
- */
 interface EventsSlideshowProps {
   events: (EventItem & { DATE: string })[];
   eventPageBasePath?: string;
@@ -12,7 +8,6 @@ interface EventsSlideshowProps {
 
 const SLIDE_INTERVAL = 4000; // 4 seconds
 
-// Converts GitHub blob to raw
 function githubBlobToRaw(url: string): string {
   const match = url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
   if (!match) return url;
@@ -28,7 +23,16 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
   const [index, setIndex] = useState(0);
   const timeoutRef = useRef<NodeJS.Timeout>();
 
-  // Auto-slide logic
+  // Find the largest post's description length
+  const maxDescriptionLength = Math.max(
+    ...slides.map(ev => (ev.DESCRIPTION?.trim().length ?? 0))
+  );
+
+  // You can set a base height, and add extra per character above a threshold
+  const baseHeight = 220; // px
+  const extraHeight = Math.max(0, maxDescriptionLength - 180) * 0.6; // px per char above threshold
+  const cardHeight = baseHeight + extraHeight;
+
   useEffect(() => {
     if (slides.length <= 1) return;
     timeoutRef.current = setTimeout(() => {
@@ -41,14 +45,12 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
 
   if (slides.length === 0) return null;
 
-  // Helper to get event images
   function getValidImages(event: EventItem & { DATE: string }): string[] {
     return [event.IMG_1, event.IMG_2, event.IMG_3]
       .filter(Boolean)
       .map((url) => typeof url === "string" ? githubBlobToRaw(url) : "");
   }
 
-  // Render a visually distinct card that navigates to /events
   function renderEventCard(event: EventItem & { DATE: string }, idx: number) {
     const images = getValidImages(event);
     const displayDescription = event.DESCRIPTION ? event.DESCRIPTION.trim() : "No description";
@@ -57,10 +59,9 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
       <div
         className="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-2xl shadow-lg overflow-hidden flex flex-col relative transition-all duration-300 cursor-pointer hover:shadow-xl"
         style={{
-          minHeight: "170px",
-          maxHeight: "220px",
-          margin: "0 8px",
+          minHeight: `${cardHeight}px`,
           width: "320px",
+          margin: "0 8px",
           position: "relative"
         }}
         role="button"
@@ -127,14 +128,14 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
     <div className="w-full max-w-4xl mx-auto relative overflow-hidden rounded-xl shadow-lg mb-8 bg-white">
       {/* Slides container */}
       <div
-        className="flex transition-transform duration-700 ease-in-out"
+        className="flex transition-transform duration-700 ease-in-out items-stretch"
         style={{
           width: `${slides.length * 340}px`,
           transform: `translateX(-${index * 340}px)`
         }}
       >
         {slides.map((event, i) => (
-          <div key={i} style={{ minWidth: "320px", maxWidth: "320px" }}>
+          <div key={i} style={{ minWidth: "320px", maxWidth: "320px", display: "flex", alignItems: "stretch" }}>
             {renderEventCard(event, i)}
           </div>
         ))}
