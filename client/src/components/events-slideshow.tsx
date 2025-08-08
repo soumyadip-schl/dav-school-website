@@ -1,10 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { EventItem } from "../pages/events";
 
-/**
- * Props for EventsSlideshow.
- * - events: Array of events, already sorted and formatted as in EventsList.
- */
 interface EventsSlideshowProps {
   events: (EventItem & { DATE: string })[];
   eventPageBasePath?: string;
@@ -12,7 +8,6 @@ interface EventsSlideshowProps {
 
 const SLIDE_INTERVAL = 4000; // 4 seconds
 
-// Converts GitHub blob to raw
 function githubBlobToRaw(url: string): string {
   const match = url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
   if (!match) return url;
@@ -48,19 +43,26 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
       .map((url) => typeof url === "string" ? githubBlobToRaw(url) : "");
   }
 
-  // Render a visually distinct card that navigates to /events
+  // Find the largest height needed for any post (based on description length)
+  function getDescriptionHeight(desc: string) {
+    // Estimate height by number of lines, adjust as needed
+    const lineCount = desc ? desc.split('\n').length : 1;
+    // Base line height is ~20px, plus padding for title and extra UI
+    return 52 /*title+padding*/ + lineCount * 20 + 48 /*bottom area*/;
+  }
+  const cardHeight = Math.max(...slides.map(ev => getDescriptionHeight(ev.DESCRIPTION?.trim() ?? "")), 180);
+
   function renderEventCard(event: EventItem & { DATE: string }, idx: number) {
     const images = getValidImages(event);
     const displayDescription = event.DESCRIPTION ? event.DESCRIPTION.trim() : "No description";
 
     return (
       <div
-        className="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-2xl shadow-lg overflow-hidden flex flex-col relative transition-all duration-300 cursor-pointer hover:shadow-xl"
+        className="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-2xl shadow-lg overflow-visible flex flex-col relative transition-all duration-300 cursor-pointer hover:shadow-xl"
         style={{
-          minHeight: "170px",
-          maxHeight: "220px",
-          margin: "0 8px",
+          minHeight: `${cardHeight}px`,
           width: "320px",
+          margin: "0 8px",
           position: "relative"
         }}
         role="button"
@@ -125,7 +127,7 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto relative overflow-hidden rounded-xl shadow-lg mb-8 bg-white">
+    <div className="w-full max-w-4xl mx-auto relative overflow-visible rounded-xl shadow-lg mb-8 bg-white">
       {/* Slides container */}
       <div
         className="flex transition-transform duration-700 ease-in-out"
