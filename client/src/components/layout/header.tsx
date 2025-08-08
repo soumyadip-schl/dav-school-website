@@ -10,13 +10,13 @@ export default function Header() {
     { label: "About", href: "/about" },
     { label: "Academics", href: "/academics" },
     { label: "Admissions", href: "/admissions" },
-    { label: "Info", href: "/info" },
+    { label: "Public Info", href: "/info" },
     { label: "Events", href: "/events" },
     { label: "Gallery", href: "/gallery" },
     { label: "Contact", href: "/contact" },
   ];
   const externalNavItems = [
-    { label: "E-Library", href: "https://elibrary.davcmc.net/", external: true }
+    { label: "E-Library", href: "https://bit.ly/E-library-DAV://bit.ly/E-library-DAV", external: true }
   ];
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
