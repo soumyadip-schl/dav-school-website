@@ -13,7 +13,7 @@ export default function PrincipalMessage() {
               }}
             >
               <img
-                src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/main/attached_assets/Picsart_25-07-15_19-33-26-605.jpg"
+                src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/5757c6d982f111e8bc287c1ae6f8dccfc42170f6/attached_assets/principal_image.jpg"
                 alt="Principal's photo"
                 className="rounded-xl shadow-lg w-full h-full object-cover"
                 style={{ aspectRatio: "4 / 3", width: "100%", height: "100%" }}
