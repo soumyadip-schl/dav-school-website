@@ -42,14 +42,59 @@ export default function About() {
             </ul>
           </div>
           
-          {/* Principal's Message added here before the image */}
-        <PrincipalMessage />
           <div>
-            <img
-              src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/a37e9d0da73b988bc57f2c7b904f1af1522e48c7/attached_assets/Message_a4213de2-8768-4736-bc67-9ce7edc51b2e_school-buil[...]
-              alt="School building"
-              className="rounded-xl shadow-lg w-full h-auto mb-6"
-            />
+            {/* Principal's Message just before the school building image */}
+            <div className="mb-8">
+              <div className="relative" style={{ width: "100%" }}>
+                {/* Overlay disables all interactions */}
+                <div
+                  className="absolute inset-0 z-10 rounded-xl"
+                  style={{
+                    background: "transparent",
+                    pointerEvents: "auto",
+                    userSelect: "none"
+                  }}
+                  onContextMenu={e => e.preventDefault()}
+                  onMouseDown={e => e.preventDefault()}
+                  onDragStart={e => e.preventDefault()}
+                  onTouchStart={e => e.preventDefault()}
+                  tabIndex={-1}
+                  aria-hidden="true"
+                />
+                {/* PrincipalMessage component is here */}
+                <PrincipalMessage />
+              </div>
+            </div>
+            {/* School building image with interaction block */}
+            <div className="relative mb-6">
+              <img
+                src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/a37e9d0da73b988bc57f2c7b904f1af1522e48c7/attached_assets/Message_a4213de2-8768-4736-bc67-9ce7edc51b2e_school-building.jpg"
+                alt="School building"
+                className="rounded-xl shadow-lg w-full h-auto"
+                draggable={false}
+                tabIndex={-1}
+                style={{
+                  pointerEvents: "none",
+                  userSelect: "none"
+                }}
+                onContextMenu={e => e.preventDefault()}
+                onDragStart={e => e.preventDefault()}
+              />
+              <div
+                className="absolute inset-0 rounded-xl"
+                style={{
+                  background: "transparent",
+                  pointerEvents: "auto",
+                  userSelect: "none"
+                }}
+                onContextMenu={e => e.preventDefault()}
+                onMouseDown={e => e.preventDefault()}
+                onDragStart={e => e.preventDefault()}
+                onTouchStart={e => e.preventDefault()}
+                tabIndex={-1}
+                aria-hidden="true"
+              />
+            </div>
             
             <div className="bg-dav-light p-6 rounded-xl">
               <h3 className="text-xl font-bold text-dav-maroon mb-4">Quick Facts</h3>
@@ -77,4 +122,4 @@ export default function About() {
       </div>
     </div>
   );
-}
+              }
