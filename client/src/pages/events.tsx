@@ -32,12 +32,19 @@ export default function EventsPage() {
   }, []);
 
   return (
-    <div className="px-4 py-8 max-w-7xl mx-auto">
-      {loading ? (
-        <p className="text-center text-gray-600">Loading events...</p>
-      ) : (
-        <EventsList events={events} />
-      )}
+    <div className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Heading for Events Page */}
+        <div className="text-center mb-12">
+          <h1 className="text-3xl font-bold text-dav-maroon mb-4">School Events</h1>
+          <p className="text-gray-600">Happenings and achievements at DAV Public School</p>
+        </div>
+        {loading ? (
+          <p className="text-center text-gray-600">Loading events...</p>
+        ) : (
+          <EventsList events={events} />
+        )}
+      </div>
     </div>
   );
 }
