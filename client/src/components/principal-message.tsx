@@ -2,22 +2,22 @@ export default function PrincipalMessage() {
   return (
     <section className="py-16 bg-white">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Image with 4:3 aspect ratio, no cropping, all interaction blocked */}
+        {/* Principal image with 16:9 aspect ratio, fully visible, no crop, all interaction blocked */}
         <div
           className="relative w-full"
           style={{
-            aspectRatio: "4 / 3",
+            aspectRatio: "16 / 9",
             width: "100%",
             maxWidth: "100%",
             userSelect: "none"
           }}
         >
           <img
-            src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/main/attached_assets/principal_image.jpg"
+            src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/405466596a6de55440ce4e8b95ce3ebcd083539e/attached_assets/principal_image(1).jpg"
             alt="Principal"
             className="rounded-xl shadow-lg w-full h-full object-contain pointer-events-none select-none"
             style={{
-              aspectRatio: "4 / 3",
+              aspectRatio: "16 / 9",
               width: "100%",
               height: "100%",
               objectFit: "contain",
@@ -71,4 +71,4 @@ export default function PrincipalMessage() {
       </div>
     </section>
   );
-              }
+}
