@@ -8,15 +8,42 @@ export default function PrincipalMessage() {
               className="relative w-full"
               style={{
                 aspectRatio: "4 / 3",
-                maxWidth: "400px",
-                margin: "0 auto",
+                width: "100%",
+                maxWidth: "100%",
+                userSelect: "none"
               }}
             >
               <img
-                src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/5757c6d982f111e8bc287c1ae6f8dccfc42170f6/attached_assets/principal_image.jpg"
+                src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/main/attached_assets/Picsart_25-07-15_19-33-26-605.jpg"
                 alt="Principal's photo"
-                className="rounded-xl shadow-lg w-full h-full object-cover"
-                style={{ aspectRatio: "4 / 3", width: "100%", height: "100%" }}
+                className="rounded-xl shadow-lg w-full h-full object-cover pointer-events-none select-none"
+                style={{
+                  aspectRatio: "4 / 3",
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  userSelect: "none",
+                  pointerEvents: "none"
+                }}
+                draggable={false}
+                tabIndex={-1}
+                onContextMenu={e => e.preventDefault()}
+                onDragStart={e => e.preventDefault()}
+              />
+              {/* Overlay to block interactions */}
+              <div
+                className="absolute inset-0 rounded-xl"
+                style={{
+                  zIndex: 2,
+                  background: "transparent",
+                  pointerEvents: "auto",
+                  userSelect: "none"
+                }}
+                onContextMenu={e => e.preventDefault()}
+                onMouseDown={e => e.preventDefault()}
+                onDragStart={e => e.preventDefault()}
+                onTouchStart={e => e.preventDefault()}
+                tabIndex={-1}
               />
             </div>
           </div>
@@ -45,4 +72,4 @@ export default function PrincipalMessage() {
       </div>
     </section>
   );
-      }
+}
