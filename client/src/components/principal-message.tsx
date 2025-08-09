@@ -4,24 +4,26 @@ export default function PrincipalMessage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            {/* Card-style container for consistent thickness with other sections */}
+            {/* Container with 16:9 aspect ratio for proper image fit */}
             <div
-              className="bg-white rounded-xl shadow-lg p-0 mb-8" // <-- No extra padding added
+              className="bg-white rounded-xl shadow-lg p-0 mb-8"
               style={{
-                aspectRatio: "4 / 3",
+                aspectRatio: "16 / 9",
                 width: "100%",
                 maxWidth: "100%"
               }}
             >
               <div className="relative w-full h-full">
                 <img
-                  src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/main/attached_assets/Picsart_25-07-15_19-33-26-605.jpg"
+                  src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/405466596a6de55440ce4e8b95ce3ebcd083539e/attached_assets/principal_image(1).jpg"
                   alt="Principal's photo"
                   className="rounded-xl w-full h-full object-cover select-none pointer-events-none"
                   style={{
-                    aspectRatio: "4 / 3",
+                    aspectRatio: "16 / 9",
                     width: "100%",
                     height: "100%",
+                    objectFit: "cover",
+                    objectPosition: "center"
                   }}
                   draggable={false}
                   tabIndex={-1}
@@ -71,4 +73,4 @@ export default function PrincipalMessage() {
       </div>
     </section>
   );
-                }
+              }
