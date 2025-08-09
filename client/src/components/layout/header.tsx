@@ -25,7 +25,6 @@ export default function Header() {
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
         {/* First Row: Logo and Title */}
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
@@ -65,14 +64,23 @@ export default function Header() {
         </div>
 
         {/* Second Row: Desktop Menu & Thin Line for Mobile */}
-        <div>
-          {/* Desktop: Properly fitted maroon background nav row */}
-          <div className="hidden md:flex w-full bg-dav-maroon items-center h-12 px-2">
-            <div className="flex items-center space-x-6 w-full justify-center">
+        {/* This row is now FULLY maroon, edge to edge */}
+        <div className="w-full bg-dav-maroon">
+          <div
+            className="hidden md:flex items-center w-full px-2"
+            style={{
+              height: "48px",
+              overflowX: "auto",
+              whiteSpace: "nowrap"
+            }}
+          >
+            <div className="flex items-center w-full min-w-full whitespace-nowrap">
               {navItems.map((item) => (
                 <Link key={item.href} href={item.href}>
                   <span className={cn(
                     "px-2 py-2 font-medium transition-colors cursor-pointer text-white",
+                    "text-[0.98rem] lg:text-base",
+                    "whitespace-nowrap",
                     location === item.href
                       ? "underline underline-offset-4"
                       : "hover:text-dav-saffron"
@@ -81,14 +89,13 @@ export default function Header() {
                   </span>
                 </Link>
               ))}
-              {/* External E-Library link */}
               {externalNavItems.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-2 py-2 font-medium transition-colors cursor-pointer text-white hover:text-dav-saffron"
+                  className="px-2 py-2 font-medium transition-colors cursor-pointer text-white hover:text-dav-saffron text-[0.98rem] lg:text-base whitespace-nowrap"
                 >
                   {item.label}
                   <span className="ml-1 align-middle" aria-label="(opens in a new tab)">
@@ -105,13 +112,13 @@ export default function Header() {
               ))}
             </div>
           </div>
-          {/* Thin maroon line for mobile */}
+          {/* Thin maroon line for mobile remains as is */}
           <div className="md:hidden">
             <div
               className="w-full"
               style={{
                 height: "3px",
-                backgroundColor: "#861d1d" // same as text-dav-maroon
+                backgroundColor: "#861d1d"
               }}
             />
           </div>
@@ -136,7 +143,6 @@ export default function Header() {
                 </span>
               </Link>
             ))}
-            {/* External E-Library link in mobile menu */}
             {externalNavItems.map((item) => (
               <a
                 key={item.href}
@@ -164,4 +170,4 @@ export default function Header() {
       )}
     </nav>
   );
-}
+          }
