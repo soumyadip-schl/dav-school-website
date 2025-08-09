@@ -16,7 +16,7 @@ export default function Header() {
     { label: "Contact", href: "/contact" },
   ];
   const externalNavItems = [
-    { label: "E-Library", href: "https://bit.ly/E-library-DAV://bit.ly/E-library-DAV", external: true }
+    { label: "E-Library", href: "https://tinyurl.com/DAV-E-Library", external: true }
   ];
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
