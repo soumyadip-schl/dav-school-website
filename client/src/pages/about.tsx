@@ -1,3 +1,5 @@
+import PrincipalMessage from "../components/principal-message";
+
 export default function About() {
   return (
     <div className="py-16 bg-white">
@@ -6,7 +8,7 @@ export default function About() {
           <h1 className="text-3xl font-bold text-dav-maroon mb-4">About DAV Public School</h1>
           <p className="text-gray-600">CBSE Affiliation No. 2430088</p>
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
             <h2 className="text-2xl font-bold text-dav-maroon mb-4">Our Mission</h2>
@@ -40,9 +42,11 @@ export default function About() {
             </ul>
           </div>
           
+          {/* Principal's Message added here before the image */}
+        <PrincipalMessage />
           <div>
             <img
-              src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/a37e9d0da73b988bc57f2c7b904f1af1522e48c7/attached_assets/Message_a4213de2-8768-4736-bc67-9ce7edc51b2e_school-building2.jpg"
+              src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/a37e9d0da73b988bc57f2c7b904f1af1522e48c7/attached_assets/Message_a4213de2-8768-4736-bc67-9ce7edc51b2e_school-buil[...]
               alt="School building"
               className="rounded-xl shadow-lg w-full h-auto mb-6"
             />
