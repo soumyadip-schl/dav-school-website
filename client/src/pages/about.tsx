@@ -68,7 +68,7 @@ export default function About() {
             {/* School building image with interaction block */}
             <div className="relative mb-6">
               <img
-                src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/a37e9d0da73b988bc57f2c7b904f1af1522e48c7/attached_assets/Message_a4213de2-8768-4736-bc67-9ce7edc51b2e_school-building.jpg"
+                src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/65c79b495799e9cc6899338c2cbc3ec94c60907b/attached_assets/Message_a4213de2-8768-4736-bc67-9ce7edc51b2e_school-building2.jpg"
                 alt="School building"
                 className="rounded-xl shadow-lg w-full h-auto"
                 draggable={false}
