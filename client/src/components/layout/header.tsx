@@ -30,7 +30,7 @@ export default function Header() {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <img 
-                className="h-12 w-12 rounded-full" 
+                className="h-12 w-12 square-full" 
                 src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/e6c5abf3ca5713c3f9afe01822a5b49cb6b957a4/attached_assets/DAV_CMC_Logo.svg.png" 
                 alt="DAV Public School Logo"  
               />
@@ -38,7 +38,7 @@ export default function Header() {
             <div className="ml-4">
               <Link href="/">
                 <h1 className="text-lg font-bold text-dav-maroon cursor-pointer">DAV Public School</h1>
-                <p className="text-sm text-dav-gray">Asansol</p>
+                <p className="text-sm text-dav-gray">Kanyapur, Asansol</p>
               </Link>
             </div>
           </div>
