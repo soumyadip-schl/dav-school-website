@@ -8,7 +8,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center mb-4">
               <img 
-                className="h-12 w-12 rounded-full" 
+                className="h-12 w-12 square-full" 
                 src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/e6c5abf3ca5713c3f9afe01822a5b49cb6b957a4/attached_assets/DAV_CMC_Logo.svg.png" 
                 alt="DAV Public School Logo" 
               />
