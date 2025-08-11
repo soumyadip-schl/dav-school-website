@@ -34,7 +34,25 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
     };
   }, [index, slides.length]);
 
-  if (slides.length === 0) return null;
+  if (slides.length === 0) {
+    return (
+      <div className="w-full max-w-7xl mx-auto relative overflow-visible rounded-xl shadow-lg mb-8 bg-white flex flex-col items-center">
+        <div
+          className="w-full h-32 bg-gray-200 flex items-center justify-center rounded-t-xl"
+          style={{
+            minHeight: "128px",
+            maxWidth: "100%",
+            backgroundColor: "#e5e7eb", // Tailwind's gray-200
+          }}
+        >
+          <span className="text-gray-500 text-lg">No image</span>
+        </div>
+        <div className="w-full py-4 flex items-center justify-center">
+          <h2 className="text-2xl font-bold text-dav-maroon text-center">School Events</h2>
+        </div>
+      </div>
+    );
+  }
 
   // Helper to get event images
   function getValidImages(event: EventItem & { DATE: string }): string[] {
@@ -43,17 +61,18 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
       .map((url) => typeof url === "string" ? githubBlobToRaw(url) : "");
   }
 
-  // Find the largest height needed for any post (based on description length)
-  function getDescriptionHeight(desc: string) {
-    const lineCount = desc ? desc.split('\n').length : 1;
-    return 52 /*title+padding*/ + lineCount * 20 + 48 /*bottom area*/;
-  }
-
-  // Calculate the maximum card height (based on the longest card)
-  const cardHeight = useMemo(
-    () => Math.max(...slides.map(ev => getDescriptionHeight(ev.DESCRIPTION?.trim() ?? "")), 180),
-    [slides]
+  // Calculate the length of the longest description, count lines/characters
+  const longestDescription = slides.reduce((a, b) =>
+    (a.DESCRIPTION?.length ?? 0) > (b.DESCRIPTION?.length ?? 0) ? a : b
   );
+  const longestDescText = longestDescription.DESCRIPTION?.trim() ?? "";
+  // Estimate number of lines based on max line breaks and wrap for long texts
+  const lineCount = longestDescText
+    ? Math.max(longestDescText.split('\n').length, Math.ceil(longestDescText.length / 55))
+    : 1;
+  // Compute height: header + img + (lines * lineHeight) + paddings + "See all events"
+  const lineHeight = 20;
+  const cardHeight = 52 /*header+padding*/ + 128 /*img*/ + (lineCount * lineHeight) + 48 /*bottom area*/ + 36 /*extra safe space*/;
 
   function renderEventCard(event: EventItem & { DATE: string }, idx: number) {
     const images = getValidImages(event);
@@ -61,20 +80,19 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
 
     return (
       <div
-        className="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-2xl shadow-lg overflow-visible flex flex-col relative transition-all duration-300 cursor-pointer hover:scale-[1.01]"
+        className="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-2xl shadow-lg overflow-hidden flex flex-col relative transition-all duration-300 cursor-pointer hover:scale-[1.01]"
         style={{
           minHeight: `${cardHeight}px`,
           height: `${cardHeight}px`,
           width: "100%",
           maxWidth: "100%",
-          margin: "0 8px",
           position: "relative"
         }}
         role="button"
         tabIndex={0}
         aria-label={`Go to events page`}
       >
-        <div className="h-32 w-full bg-gray-100 flex items-center justify-center relative">
+        <div className="h-32 w-full bg-gray-200 flex items-center justify-center relative">
           <span
             className="absolute left-3 top-3 text-xs font-semibold bg-white/90 px-2 py-1 rounded shadow z-10"
             style={{ pointerEvents: "none" }}
@@ -104,9 +122,22 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
             </div>
           )}
         </div>
-        <div className="p-4 text-left flex-1 flex flex-col relative">
-          <h3 className="text-lg font-bold mb-1 text-indigo-900">{event.TITLE}</h3>
-          <p className="text-gray-700 text-sm whitespace-pre-line flex-1" style={{ textAlign: "left" }}>
+        <div className="p-4 text-left flex-1 flex flex-col relative overflow-hidden">
+          <h3 className="text-lg font-bold mb-1 text-indigo-900 truncate">{event.TITLE}</h3>
+          <p
+            className="text-gray-700 text-sm whitespace-pre-line flex-1 break-words overflow-ellipsis"
+            style={{
+              textAlign: "left",
+              overflowWrap: "break-word",
+              wordBreak: "break-word",
+              display: "-webkit-box",
+              WebkitLineClamp: lineCount,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              lineHeight: `${lineHeight}px`,
+              maxHeight: `${lineCount * lineHeight}px`,
+            }}
+          >
             {displayDescription}
           </p>
           <span className="absolute right-4 bottom-3 text-xs text-indigo-600 font-semibold opacity-80 pointer-events-none">
@@ -130,7 +161,7 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
   }
 
   return (
-    <div className="w-full mx-auto relative overflow-visible rounded-xl shadow-lg mb-8 bg-white">
+    <div className="w-full max-w-7xl mx-auto relative overflow-visible rounded-xl shadow-lg mb-8 bg-white">
       <div
         className="flex transition-transform duration-700 ease-in-out"
         style={{
@@ -182,6 +213,9 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
       >
         <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} fill="none" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
       </button>
+      <div className="w-full py-4 flex items-center justify-center">
+        <h2 className="text-2xl font-bold text-dav-maroon text-center">School Events</h2>
+      </div>
     </div>
   );
 };
