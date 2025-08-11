@@ -110,11 +110,19 @@ export default function Footer() {
           <div className="max-w-screen-xl mx-auto px-4">
             <p>
               &copy; 2025 DAV Public School, Kanyapur, Asansol. All rights reserved. | 
-              Designed with 🧡🤍💚 by Soumyadip Karforma
+              Designed with 🧡🤍💚 by{" "}
+              <a
+                href="https://github.com/soumyadipkarforma06"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-dav-saffron underline hover:text-white transition-colors"
+              >
+                Soumyadip Karforma
+              </a>
             </p>
           </div>
         </div>
       </div>
     </footer>
   );
-}
+      }
