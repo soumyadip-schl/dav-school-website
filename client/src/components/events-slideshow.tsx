@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import type { EventItem } from "../pages/events";
 
 interface EventsSlideshowProps {
@@ -45,12 +45,15 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
 
   // Find the largest height needed for any post (based on description length)
   function getDescriptionHeight(desc: string) {
-    // Estimate height by number of lines, adjust as needed
     const lineCount = desc ? desc.split('\n').length : 1;
-    // Base line height is ~20px, plus padding for title and extra UI
     return 52 /*title+padding*/ + lineCount * 20 + 48 /*bottom area*/;
   }
-  const cardHeight = Math.max(...slides.map(ev => getDescriptionHeight(ev.DESCRIPTION?.trim() ?? "")), 180);
+
+  // Calculate the maximum card height (based on the longest card)
+  const cardHeight = useMemo(
+    () => Math.max(...slides.map(ev => getDescriptionHeight(ev.DESCRIPTION?.trim() ?? "")), 180),
+    [slides]
+  );
 
   function renderEventCard(event: EventItem & { DATE: string }, idx: number) {
     const images = getValidImages(event);
@@ -58,10 +61,12 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
 
     return (
       <div
-        className="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-2xl shadow-lg overflow-visible flex flex-col relative transition-all duration-300 cursor-pointer hover:shadow-xl"
+        className="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-2xl shadow-lg overflow-visible flex flex-col relative transition-all duration-300 cursor-pointer hover:scale-[1.01]"
         style={{
           minHeight: `${cardHeight}px`,
-          width: "320px",
+          height: `${cardHeight}px`,
+          width: "100%",
+          maxWidth: "100%",
           margin: "0 8px",
           position: "relative"
         }}
@@ -70,7 +75,6 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
         aria-label={`Go to events page`}
       >
         <div className="h-32 w-full bg-gray-100 flex items-center justify-center relative">
-          {/* Date badge inside image area, top left */}
           <span
             className="absolute left-3 top-3 text-xs font-semibold bg-white/90 px-2 py-1 rounded shadow z-10"
             style={{ pointerEvents: "none" }}
@@ -109,7 +113,6 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
             See all events →
           </span>
         </div>
-        {/* Overlay link to events page */}
         <a
           href={eventPageBasePath}
           style={{
@@ -127,17 +130,25 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto relative overflow-visible rounded-xl shadow-lg mb-8 bg-white">
-      {/* Slides container */}
+    <div className="w-full mx-auto relative overflow-visible rounded-xl shadow-lg mb-8 bg-white">
       <div
         className="flex transition-transform duration-700 ease-in-out"
         style={{
-          width: `${slides.length * 340}px`,
-          transform: `translateX(-${index * 340}px)`
+          width: "100%",
+          transform: `translateX(-${index * 100}%)`
         }}
       >
         {slides.map((event, i) => (
-          <div key={i} style={{ minWidth: "320px", maxWidth: "320px" }}>
+          <div
+            key={i}
+            className="flex-shrink-0"
+            style={{
+              width: "100%",
+              maxWidth: "100%",
+              minWidth: "100%",
+              boxSizing: "border-box"
+            }}
+          >
             {renderEventCard(event, i)}
           </div>
         ))}
