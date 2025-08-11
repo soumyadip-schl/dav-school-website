@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import type { EventItem } from "../pages/events";
 
 interface EventsSlideshowProps {
@@ -36,7 +36,7 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
 
   if (slides.length === 0) {
     return (
-      <div className="w-full max-w-7xl mx-auto relative overflow-visible rounded-xl shadow-lg mb-8 bg-white flex flex-col items-center">
+      <div className="w-full max-w-7xl mx-auto bg-gray-100 rounded-xl shadow-lg mb-8 flex flex-col items-center p-4">
         <div
           className="w-full h-32 bg-gray-200 flex items-center justify-center rounded-t-xl"
           style={{
@@ -61,18 +61,14 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
       .map((url) => typeof url === "string" ? githubBlobToRaw(url) : "");
   }
 
-  // Calculate the length of the longest description, count lines/characters
-  const longestDescription = slides.reduce((a, b) =>
-    (a.DESCRIPTION?.length ?? 0) > (b.DESCRIPTION?.length ?? 0) ? a : b
-  );
-  const longestDescText = longestDescription.DESCRIPTION?.trim() ?? "";
-  // Estimate number of lines based on max line breaks and wrap for long texts
-  const lineCount = longestDescText
-    ? Math.max(longestDescText.split('\n').length, Math.ceil(longestDescText.length / 55))
-    : 1;
-  // Compute height: header + img + (lines * lineHeight) + paddings + "See all events"
-  const lineHeight = 20;
-  const cardHeight = 52 /*header+padding*/ + 128 /*img*/ + (lineCount * lineHeight) + 48 /*bottom area*/ + 36 /*extra safe space*/;
+  // Find the longest description
+  const maxDescLength = Math.max(...slides.map(ev => ev.DESCRIPTION?.length || 0));
+  const maxDesc = slides.find(ev => (ev.DESCRIPTION?.length || 0) === maxDescLength)?.DESCRIPTION || "";
+
+  // Estimate a minimum height based on the longest description (lines * lineHeight)
+  // Fallback minHeight if all descriptions are empty
+  const descriptionLines = (maxDesc.split('\n').length || 1) + Math.ceil(maxDesc.length / 60);
+  const minCardHeight = 52 + 128 + (descriptionLines * 20) + 48 + 36;
 
   function renderEventCard(event: EventItem & { DATE: string }, idx: number) {
     const images = getValidImages(event);
@@ -80,11 +76,10 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
 
     return (
       <div
-        className="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-2xl shadow-lg overflow-hidden flex flex-col relative transition-all duration-300 cursor-pointer hover:scale-[1.01]"
+        className="bg-white border-2 border-indigo-200 rounded-2xl shadow-lg flex flex-col relative transition-all duration-300 hover:scale-[1.01] w-full overflow-hidden"
         style={{
-          minHeight: `${cardHeight}px`,
-          height: `${cardHeight}px`,
-          width: "100%",
+          minHeight: `${minCardHeight}px`,
+          height: "auto",
           maxWidth: "100%",
           position: "relative"
         }}
@@ -122,20 +117,17 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
             </div>
           )}
         </div>
-        <div className="p-4 text-left flex-1 flex flex-col relative overflow-hidden">
-          <h3 className="text-lg font-bold mb-1 text-indigo-900 truncate">{event.TITLE}</h3>
+        <div className="p-4 text-left flex-1 flex flex-col relative overflow-x-hidden overflow-y-auto">
+          <h3 className="text-lg font-bold mb-1 text-indigo-900">{event.TITLE}</h3>
           <p
-            className="text-gray-700 text-sm whitespace-pre-line flex-1 break-words overflow-ellipsis"
+            className="text-gray-700 text-sm whitespace-pre-line flex-1 break-words"
             style={{
               textAlign: "left",
               overflowWrap: "break-word",
               wordBreak: "break-word",
-              display: "-webkit-box",
-              WebkitLineClamp: lineCount,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-              lineHeight: `${lineHeight}px`,
-              maxHeight: `${lineCount * lineHeight}px`,
+              lineHeight: "20px",
+              maxHeight: "none",
+              overflow: "visible",
             }}
           >
             {displayDescription}
@@ -161,20 +153,18 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto relative overflow-visible rounded-xl shadow-lg mb-8 bg-white">
+    <div className="w-full max-w-7xl mx-auto bg-dav-light rounded-xl shadow-lg mb-8 flex flex-col items-center p-4">
       <div
-        className="flex transition-transform duration-700 ease-in-out"
+        className="w-full flex transition-transform duration-700 ease-in-out"
         style={{
-          width: "100%",
           transform: `translateX(-${index * 100}%)`
         }}
       >
         {slides.map((event, i) => (
           <div
             key={i}
-            className="flex-shrink-0"
+            className="flex-shrink-0 w-full"
             style={{
-              width: "100%",
               maxWidth: "100%",
               minWidth: "100%",
               boxSizing: "border-box"
@@ -185,7 +175,7 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
         ))}
       </div>
       {/* Dots */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
+      <div className="mt-4 flex space-x-2 z-10">
         {slides.map((_, i) => (
           <button
             key={i}
@@ -203,6 +193,7 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
         className="absolute left-3 top-1/2 -translate-y-1/2 bg-indigo-100 rounded-full shadow p-2 hover:bg-indigo-500 hover:text-white text-indigo-700 transition-all z-10"
         onClick={() => setIndex(i => (i === 0 ? slides.length - 1 : i - 1))}
         aria-label="Previous slide"
+        style={{marginTop: "-24px"}}
       >
         <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} fill="none" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
       </button>
@@ -210,6 +201,7 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
         className="absolute right-3 top-1/2 -translate-y-1/2 bg-indigo-100 rounded-full shadow p-2 hover:bg-indigo-500 hover:text-white text-indigo-700 transition-all z-10"
         onClick={() => setIndex(i => (i === slides.length - 1 ? 0 : i + 1))}
         aria-label="Next slide"
+        style={{marginTop: "-24px"}}
       >
         <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} fill="none" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
       </button>
