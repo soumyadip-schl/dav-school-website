@@ -115,7 +115,7 @@ export default function Footer() {
                 href="https://github.com/soumyadipkarforma06"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-dav-saffron underline hover:text-white transition-colors"
+                className="text-white underline hover:text-dav-saffron transition-colors"
               >
                 Soumyadip Karforma
               </a>
