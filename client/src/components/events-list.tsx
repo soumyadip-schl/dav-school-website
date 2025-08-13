@@ -10,7 +10,7 @@ function githubBlobToRaw(url: string): string {
 }
 
 interface Props {
-  events: (EventItem & { DATE: string })[];
+  events: (EventItem & { DATE?: string })[];
 }
 
 const Dot = ({
@@ -44,7 +44,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
 
   // Defensive: Remove undefined/null/invalid events
   const sortedEvents = events
-    .filter((e) => e && e.TITLE && e.DATE)
+    .filter((e) => e && e.TITLE)
     .reverse();
 
   // Slideshow index per card, always keep state (never re-key cards)
@@ -85,7 +85,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
   };
 
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {sortedEvents.map((event, idx) => {
         // Defensive event fields
         const title =
@@ -122,7 +122,14 @@ const EventsList: React.FC<Props> = ({ events }) => {
               </span>
             )}
             {/* Image with slideshow */}
-            <div className="h-48 w-full bg-gray-100 flex items-center justify-center relative">
+            <div
+              className="w-full bg-gray-100 flex items-center justify-center relative"
+              style={{
+                aspectRatio: "16/9",
+                minHeight: 0,
+                height: "auto",
+              }}
+            >
               {images[slideIndex] ? (
                 <>
                   <img
@@ -135,10 +142,14 @@ const EventsList: React.FC<Props> = ({ events }) => {
                     style={{
                       pointerEvents: "none",
                       userSelect: "none",
+                      aspectRatio: "16/9",
+                      maxHeight: "100%",
+                      maxWidth: "100%",
+                      display: "block",
                     }}
                     onError={(e) => {
                       (e.target as HTMLImageElement).src =
-                        "https://via.placeholder.com/600x300?text=Image+not+found";
+                        "https://via.placeholder.com/600x338?text=Image+not+found";
                     }}
                   />
                   {images.length > 1 && (
@@ -214,7 +225,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
                   )}
                 </>
               ) : (
-                <div className="h-48 w-full bg-gray-200 flex items-center justify-center text-gray-400">
+                <div className="w-full bg-gray-200 flex items-center justify-center text-gray-400" style={{ aspectRatio: "16/9" }}>
                   <span>No image available</span>
                 </div>
               )}
