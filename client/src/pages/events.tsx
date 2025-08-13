@@ -8,11 +8,15 @@ export type EventItem = {
   IMG_1?: string;
   IMG_2?: string;
   IMG_3?: string;
+  DATE?: string;
 };
+
+const BATCH_SIZE = 10; // Number of events to load at once
 
 export default function EventsPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -31,6 +35,10 @@ export default function EventsPage() {
     fetchEvents();
   }, []);
 
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => Math.min(prev + BATCH_SIZE, events.length));
+  };
+
   return (
     <div className="py-16 bg-dav-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,7 +50,19 @@ export default function EventsPage() {
         {loading ? (
           <p className="text-center text-gray-600">Loading events...</p>
         ) : (
-          <EventsList events={events} />
+          <>
+            <EventsList events={events.slice(0, visibleCount)} />
+            {visibleCount < events.length && (
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={handleLoadMore}
+                  className="px-6 py-2 bg-dav-saffron text-white rounded-lg shadow hover:bg-dav-saffron/90 transition"
+                >
+                  Load Older Events
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
