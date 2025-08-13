@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import type { EventItem } from "../pages/events";
 
 // Timing for the marquee scroll
-const SCROLL_SPEED = 30; // pixels per second
+const SCROLL_SPEED = 100; // pixels per second
 
 interface EventsSlideshowProps {
   events: (EventItem & { DATE: string })[];
