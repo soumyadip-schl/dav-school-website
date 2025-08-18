@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import type { EventItem } from "../pages/events";
 
 // Timing for the marquee scroll
-const SCROLL_SPEED = 100; // pixels per second
+const SCROLL_SPEED = 150; // pixels per second
 
 interface EventsSlideshowProps {
   events: (EventItem & { DATE: string })[];
@@ -22,10 +22,13 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Only show the top 5 events
+  const topEvents = events.slice(0, 5);
+
   // Marquee scroll logic (auto-scroll horizontally)
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || events.length === 0) return;
+    if (!container || topEvents.length === 0) return;
     let req: number;
     let scrollX = 0;
     let lastTimestamp = performance.now();
@@ -49,11 +52,11 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
     return () => {
       cancelAnimationFrame(req);
     };
-  }, [events.length]);
+  }, [topEvents.length]);
 
   // Find the tallest card height for consistency
-  const longestDescLength = Math.max(...events.map(ev => ev.DESCRIPTION?.length || 0), 0);
-  const longestDesc = events.find(ev => (ev.DESCRIPTION?.length || 0) === longestDescLength)?.DESCRIPTION || "";
+  const longestDescLength = Math.max(...topEvents.map(ev => ev.DESCRIPTION?.length || 0), 0);
+  const longestDesc = topEvents.find(ev => (ev.DESCRIPTION?.length || 0) === longestDescLength)?.DESCRIPTION || "";
   const minLines = (longestDesc.match(/\n/g)?.length || 0) + Math.ceil(longestDesc.length / 50) + 1;
   const minCardHeight = 180 + 48 + (minLines * 20) + 50; // 16:9 ratio area is 180px for 320px width
 
@@ -151,7 +154,7 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
   }
 
   // No events
-  if (events.length === 0) {
+  if (topEvents.length === 0) {
     return (
       <section className="w-full max-w-7xl mx-auto bg-dav-light rounded-xl shadow-lg mb-8 px-2 md:px-4 pt-8 pb-4 flex flex-col items-center overflow-hidden">
         <div
@@ -183,9 +186,9 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
           width: "100%",
         }}
       >
-        {events.map((event, idx) => renderEventCard(event, idx))}
+        {topEvents.map((event, idx) => renderEventCard(event, idx))}
         {/* Optionally repeat cards for seamless loop */}
-        {events.length > 1 && events.map((event, idx) => renderEventCard(event, idx + events.length))}
+        {topEvents.length > 1 && topEvents.map((event, idx) => renderEventCard(event, idx + topEvents.length))}
       </div>
       <h2 className="text-2xl font-bold text-dav-maroon text-center mt-8 mb-2">School Events</h2>
     </section>
