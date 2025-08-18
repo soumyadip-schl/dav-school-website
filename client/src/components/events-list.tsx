@@ -44,8 +44,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
 
   // Defensive: Remove undefined/null/invalid events
   const sortedEvents = events
-    .filter((e) => e && e.TITLE)
-    .reverse();
+    .filter((e) => e && e.TITLE); // <- No reverse here
 
   // Slideshow index per card, always keep state (never re-key cards)
   const [slideIndexes, setSlideIndexes] = useState<{ [key: number]: number }>(
