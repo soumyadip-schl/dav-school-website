@@ -39,7 +39,7 @@ export default function Admissions() {
           </div>
           
           <div>
-            <div className="mb-8">
+            <div className="mb-8 relative">
               <img
                 src="https://raw.githubusercontent.com/soumyadip-schl/assets-dav/b62f9c7c4d72068f93f42fdd99aef1cdbcbffbad/web-assets/admissions.jpg"
                 alt="Admissions"
@@ -102,4 +102,4 @@ export default function Admissions() {
       </div>
     </div>
   );
-      }
+}
