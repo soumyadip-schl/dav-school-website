@@ -117,6 +117,12 @@ export default function About() {
                 </div>
               </div>
             </div>
+            <div className="mt-12 text-center">
+          <button className="bg-dav-saffron hover:bg-dav-orange text-white px-8 py-3 rounded-lg font-semibold transition-colors hover-lift">
+            <i className="fas fa-download mr-2"></i>
+            Download Public Info
+          </button>
+            </div>
           </div>
         </div>
       </div>
