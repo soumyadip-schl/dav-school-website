@@ -68,7 +68,7 @@ export default function About() {
             {/* School building image with interaction block */}
             <div className="relative mb-6">
               <img
-                src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/65c79b495799e9cc6899338c2cbc3ec94c60907b/attached_assets/Message_a4213de2-8768-4736-bc67-9ce7edc51b2e_school-building2.jpg"
+                src="https://raw.githubusercontent.com/soumyadip-schl/assets-dav/b62f9c7c4d72068f93f42fdd99aef1cdbcbffbad/web-assets/schl-building.jpg"
                 alt="School building"
                 className="rounded-xl shadow-lg w-full h-auto"
                 draggable={false}
@@ -100,20 +100,20 @@ export default function About() {
               <h3 className="text-xl font-bold text-dav-maroon mb-4">Quick Facts</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-2xl font-bold text-dav-saffron">25+</p>
-                  <p className="text-gray-600">Years of Excellence</p>
+                  <p className="text-2xl font-bold text-dav-saffron">3 acres</p>
+                  <p className="text-gray-600">Campus Area</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-dav-saffron">1500+</p>
-                  <p className="text-gray-600">Students</p>
+                  <p className="text-2xl font-bold text-dav-saffron">2</p>
+                  <p className="text-gray-600">Computer Labs</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-dav-saffron">100+</p>
-                  <p className="text-gray-600">Faculty Members</p>
+                  <p className="text-2xl font-bold text-dav-saffron">Top Notch</p>
+                  <p className="text-gray-600">Faculty</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-dav-saffron">100%</p>
-                  <p className="text-gray-600">Board Results</p>
+                  <p className="text-2xl font-bold text-dav-saffron">Excellence</p>
+                  <p className="text-gray-600">in Sports</p>
                 </div>
               </div>
             </div>
