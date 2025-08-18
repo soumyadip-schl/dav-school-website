@@ -33,7 +33,8 @@ router.get("/api/events", async (req: Request, res: Response) => {
     // Filter out blank rows (no title)
     const filteredEvents = events.filter((event: any) => event.TITLE && event.TITLE.trim().length > 0);
 
-    res.json({ events: filteredEvents });
+    // Invert the array to preserve the original order as in the CSV
+    res.json({ events: filteredEvents.reverse() });
   } catch (error) {
     console.error("Error fetching events:", error);
     res.status(500).json({ error: "Failed to fetch events" });
