@@ -39,27 +39,10 @@ export default function Admissions() {
                 ))}
               </ul>
             </div>
-            
-            <div className="bg-white border-2 border-dav-light p-6 rounded-xl">
-              <h3 className="text-xl font-bold text-dav-maroon mb-4">Important Dates</h3>
-              <div className="space-y-3">
-                {importantDates.map((date, index) => (
-                  <div key={index} className="flex justify-between">
-                    <span className="text-gray-600">{date.label}</span>
-                    <span className="font-semibold">{date.date}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          <div className="mt-8 text-center">
+            <div className="mt-8 text-center">
             <button className="bg-dav-saffron hover:bg-dav-orange text-white px-8 py-3 rounded-lg font-semibold transition-colors hover-lift mr-4">
               <i className="fas fa-download mr-2"></i>
               Download Application Form
-            </button>
-            <button className="border-2 border-dav-saffron text-dav-saffron hover:bg-dav-saffron hover:text-white px-8 py-3 rounded-lg font-semibold transition-colors hover-lift">
-              Apply Online
             </button>
           </div>
         </div>
