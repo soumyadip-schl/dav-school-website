@@ -1,4 +1,4 @@
-import { admissionProcess, requiredDocuments, importantDates } from "@/lib/data";
+import { admissionProcess, requiredDocuments } from "@/lib/data";
 
 export default function Admissions() {
   return (
@@ -6,12 +6,16 @@ export default function Admissions() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold text-dav-maroon mb-4">Admissions 2024-25</h1>
-          <p className="text-gray-600">Join our school community and embark on an educational journey</p>
+          <p className="text-gray-600">
+            Join our school community and embark on an educational journey
+          </p>
         </div>
-        
+
         <div className="max-w-4xl mx-auto">
           <div className="bg-dav-light p-8 rounded-xl mb-8">
-            <h2 className="text-2xl font-bold text-dav-maroon mb-6">Admission Process</h2>
+            <h2 className="text-2xl font-bold text-dav-maroon mb-6">
+              Admission Process
+            </h2>
             <div className="space-y-6">
               {admissionProcess.map((step) => (
                 <div key={step.step} className="flex items-start">
@@ -26,10 +30,12 @@ export default function Admissions() {
               ))}
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white border-2 border-dav-light p-6 rounded-xl">
-              <h3 className="text-xl font-bold text-dav-maroon mb-4">Required Documents</h3>
+              <h3 className="text-xl font-bold text-dav-maroon mb-4">
+                Required Documents
+              </h3>
               <ul className="text-gray-600 space-y-2">
                 {requiredDocuments.map((doc, index) => (
                   <li key={index} className="flex items-center">
@@ -39,7 +45,9 @@ export default function Admissions() {
                 ))}
               </ul>
             </div>
-            <div className="mt-8 text-center">
+          </div>
+
+          <div className="mt-8 text-center">
             <button className="bg-dav-saffron hover:bg-dav-orange text-white px-8 py-3 rounded-lg font-semibold transition-colors hover-lift mr-4">
               <i className="fas fa-download mr-2"></i>
               Download Application Form
