@@ -5,7 +5,7 @@ import type { EventItem } from "../pages/events";
 const SCROLL_SPEED = 150; // pixels per second
 
 interface EventsSlideshowProps {
-  events: (EventItem & { DATE: string })[];
+  events: (EventItem & { DATE?: string })[];
   eventPageBasePath?: string;
 }
 
@@ -22,7 +22,7 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Only show the top 5 events
+  // Only show the top 5 events from backend (first 5 in the array)
   const topEvents = events.slice(0, 5);
 
   // Marquee scroll logic (auto-scroll horizontally)
@@ -60,7 +60,7 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
   const minLines = (longestDesc.match(/\n/g)?.length || 0) + Math.ceil(longestDesc.length / 50) + 1;
   const minCardHeight = 180 + 48 + (minLines * 20) + 50; // 16:9 ratio area is 180px for 320px width
 
-  function renderEventCard(event: EventItem & { DATE: string }, idx: number) {
+  function renderEventCard(event: EventItem & { DATE?: string }, idx: number) {
     const images = [event.IMG_1, event.IMG_2, event.IMG_3]
       .filter(Boolean)
       .map((url) => typeof url === "string" ? githubBlobToRaw(url) : "");
@@ -88,12 +88,14 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
             justifyContent: "center",
           }}
         >
-          <span
-            className="absolute left-3 top-3 text-xs font-semibold bg-white/90 px-2 py-1 rounded shadow z-10"
-            style={{ pointerEvents: "none" }}
-          >
-            {event.DATE}
-          </span>
+          {event.DATE && (
+            <span
+              className="absolute left-3 top-3 text-xs font-semibold bg-white/90 px-2 py-1 rounded shadow z-10"
+              style={{ pointerEvents: "none" }}
+            >
+              {event.DATE}
+            </span>
+          )}
           {images.length > 0 && images[0] ? (
             <img
               src={images[0]}
