@@ -15,7 +15,7 @@ export default function PrincipalMessage() {
             >
               <div className="relative w-full h-full">
                 <img
-                  src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/405466596a6de55440ce4e8b95ce3ebcd083539e/attached_assets/principal_image(1).jpg"
+                  src="https://raw.githubusercontent.com/soumyadip-schl/assets-dav/b62f9c7c4d72068f93f42fdd99aef1cdbcbffbad/web-assets/principal_image.jpg"
                   alt="Principal's photo"
                   className="rounded-xl w-full h-full object-cover select-none pointer-events-none"
                   style={{
