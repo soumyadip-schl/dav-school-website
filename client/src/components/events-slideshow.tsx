@@ -22,8 +22,11 @@ const EventsSlideshow: React.FC<EventsSlideshowProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Use .filter to only include valid events with TITLE
+  const filteredEvents = events.filter(e => e && e.TITLE);
+
   // Only show the top 5 events from backend (first 5 in the array)
-  const topEvents = events.slice(0, 5);
+  const topEvents = filteredEvents.slice(0, 5);
 
   // Marquee scroll logic (auto-scroll horizontally)
   useEffect(() => {
