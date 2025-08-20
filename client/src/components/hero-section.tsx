@@ -6,7 +6,7 @@ export default function HeroSection() {
       <div 
         className="h-96 md:h-[500px] bg-cover bg-center relative"
         style={{
-          backgroundImage: "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/a37e9d0da73b988bc57f2c7b904f1af1522e48c7/attached_assets/Message_a4213de2-8768-4736-bc67-9ce7edc51b2e_school-building2.jpg')"
+          backgroundImage: "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/soumyadip-schl/assets-dav/b62f9c7c4d72068f93f42fdd99aef1cdbcbffbad/web-assets/schl-building.jpg')"
         }}
       >
         <div className="absolute inset-0 flex items-center justify-center">
