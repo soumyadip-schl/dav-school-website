@@ -10,7 +10,6 @@ export default function Header() {
     { label: "About", href: "/about" },
     { label: "Academics", href: "/academics" },
     { label: "Admissions", href: "/admissions" },
-    { label: "Public Info", href: "/info" },
     { label: "Events", href: "/events" },
     { label: "Gallery", href: "/gallery" },
     { label: "Contact", href: "/contact" },
@@ -31,7 +30,7 @@ export default function Header() {
             <div className="flex-shrink-0">
               <img 
                 className="h-12 w-12 square-full" 
-                src="https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/e6c5abf3ca5713c3f9afe01822a5b49cb6b957a4/attached_assets/DAV_CMC_Logo.svg.png" 
+                src="https://raw.githubusercontent.com/soumyadip-schl/assets-dav/b62f9c7c4d72068f93f42fdd99aef1cdbcbffbad/web-assets/DAV_CMC_Logo.svg.png" 
                 alt="DAV Public School Logo"  
               />
             </div>
