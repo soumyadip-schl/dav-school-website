@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EventsList from "../components/events-list";
+import Papa from "papaparse";
 
 // Type definition for your event
 export type EventItem = {
@@ -13,6 +14,10 @@ export type EventItem = {
 
 const BATCH_SIZE = 10; // Number of events to load at once
 
+// --- CONFIGURE THESE WITH YOUR SHEET ---
+const SHEET_ID = "13ZaNelSP0D-TE9mRrZz3umvucbvudlMJnbpAAR0pA2c";
+const SHEET_TAB = "EVENTS"; // Or your tab name
+
 export default function EventsPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,11 +26,20 @@ export default function EventsPage() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch("/api/events");
+        // Google Sheets published as CSV: https://docs.google.com/spreadsheets/d/SHEET_ID/gviz/tq?tqx=out:csv&sheet=TAB
+        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_TAB)}`;
+        const res = await fetch(url);
         if (!res.ok) throw new Error("Failed to fetch events");
-        const data = await res.json();
-        // The backend returns { events: EventItem[] }
-        setEvents(Array.isArray(data.events) ? data.events : []);
+        const csv = await res.text();
+
+        // Parse CSV using PapaParse
+        const parsed = Papa.parse<EventItem>(csv, { header: true, skipEmptyLines: true, dynamicTyping: false, trimHeaders: true, });
+        // Filter out blank rows (no title)
+        let filteredEvents = Array.isArray(parsed.data)
+          ? parsed.data.filter((event) => event.TITLE && event.TITLE.trim().length > 0)
+          : [];
+        // Invert the array to preserve the original order as in the CSV
+        setEvents(filteredEvents.reverse());
       } catch (err) {
         setEvents([]);
       } finally {
