@@ -15,7 +15,7 @@ export type EventItem = {
 const BATCH_SIZE = 10; // Number of events to load at once
 
 // --- CONFIGURE THESE WITH YOUR SHEET ---
-const SHEET_ID = "YOUR_GOOGLE_SHEET_ID";
+const SHEET_ID = "13ZaNelSP0D-TE9mRrZz3umvucbvudlMJnbpAAR0pA2c";
 const SHEET_TAB = "EVENTS"; // Or your tab name
 
 export default function EventsPage() {
