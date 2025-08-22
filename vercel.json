@@ -2,10 +2,8 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist/server/public",
   "cleanUrls": true,
-  "trailingSlash": false
-  
+  "trailingSlash": false,
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ]
-
 }
