@@ -1,22 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import Papa from "papaparse";
+import React, { useRef, useEffect } from "react";
+import { useEvents, EventItem } from "../context/events-context";
 
-// Type definition for your event
-export type EventItem = {
-  TITLE: string;
-  DESCRIPTION?: string;
-  IMG_1?: string;
-  IMG_2?: string;
-  IMG_3?: string;
-  DATE?: string;
-};
-
-// --- CONFIGURE THESE WITH YOUR SHEET ---
-const SHEET_ID = "13ZaNelSP0D-TE9mRrZz3umvucbvudlMJnbpAAR0pA2c";
-const SHEET_TAB = "EVENTS";
-
-// Timing for the marquee scroll
-const SCROLL_SPEED = 150; // pixels per second
+const SCROLL_SPEED = 150;
 
 function githubBlobToRaw(url: string): string {
   const match = url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
@@ -28,38 +13,13 @@ function githubBlobToRaw(url: string): string {
 const EventsSlideshow: React.FC<{ eventPageBasePath?: string }> = ({
   eventPageBasePath = "/events",
 }) => {
-  const [events, setEvents] = useState<EventItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { events, loading } = useEvents();
+  const topEvents = events.slice(0, 5);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_TAB)}`;
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("Failed to fetch events");
-        const csv = await res.text();
-        const parsed = Papa.parse<EventItem>(csv, {
-          header: true,
-          skipEmptyLines: true,
-        });
-        let filteredEvents = Array.isArray(parsed.data)
-          ? parsed.data.filter((event) => event.TITLE && event.TITLE.trim().length > 0)
-          : [];
-        setEvents(filteredEvents.reverse().slice(0, 5)); // Only top 5 events
-      } catch (err) {
-        setEvents([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchEvents();
-  }, []);
-
-  // Marquee scroll logic (auto-scroll horizontally)
-  useEffect(() => {
     const container = containerRef.current;
-    if (!container || events.length === 0) return;
+    if (!container || topEvents.length === 0) return;
     let req: number;
     let scrollX = 0;
     let lastTimestamp = performance.now();
@@ -77,13 +37,13 @@ const EventsSlideshow: React.FC<{ eventPageBasePath?: string }> = ({
 
     req = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(req);
-  }, [events.length]);
+  }, [topEvents.length]);
 
   // Find the tallest card height for consistency
-  const longestDescLength = Math.max(...events.map(ev => ev.DESCRIPTION?.length || 0), 0);
-  const longestDesc = events.find(ev => (ev.DESCRIPTION?.length || 0) === longestDescLength)?.DESCRIPTION || "";
+  const longestDescLength = Math.max(...topEvents.map(ev => ev.DESCRIPTION?.length || 0), 0);
+  const longestDesc = topEvents.find(ev => (ev.DESCRIPTION?.length || 0) === longestDescLength)?.DESCRIPTION || "";
   const minLines = (longestDesc.match(/\n/g)?.length || 0) + Math.ceil(longestDesc.length / 50) + 1;
-  const minCardHeight = 180 + 48 + (minLines * 20) + 50; // 16:9 ratio area is 180px for 320px width
+  const minCardHeight = 180 + 48 + (minLines * 20) + 50;
 
   function renderEventCard(event: EventItem, idx: number) {
     const images = [event.IMG_1, event.IMG_2, event.IMG_3]
@@ -148,7 +108,7 @@ const EventsSlideshow: React.FC<{ eventPageBasePath?: string }> = ({
         <div className="p-4 text-left flex-1 flex flex-col overflow-x-hidden overflow-y-auto">
           <h3 className="text-lg font-bold mb-2 text-indigo-900">{event.TITLE}</h3>
           <p
-            className="text-gray-700 text-sm whitespace-pre-line flex-1 break-words"
+            className="text-gray-700 text-xs whitespace-pre-line flex-1 break-words" // text-xs for 2 units smaller
             style={{
               textAlign: "left",
               overflowWrap: "break-word",
@@ -200,7 +160,7 @@ const EventsSlideshow: React.FC<{ eventPageBasePath?: string }> = ({
     );
   }
 
-  if (events.length === 0) {
+  if (topEvents.length === 0) {
     return (
       <section className="w-full max-w-7xl mx-auto bg-dav-light rounded-xl shadow-lg mb-8 px-2 md:px-4 pt-8 pb-4 flex flex-col items-center overflow-hidden">
         <div
@@ -231,8 +191,8 @@ const EventsSlideshow: React.FC<{ eventPageBasePath?: string }> = ({
           width: "100%",
         }}
       >
-        {events.map((event, idx) => renderEventCard(event, idx))}
-        {events.length > 1 && events.map((event, idx) => renderEventCard(event, idx + events.length))}
+        {topEvents.map((event, idx) => renderEventCard(event, idx))}
+        {topEvents.length > 1 && topEvents.map((event, idx) => renderEventCard(event, idx + topEvents.length))}
       </div>
       <h2 className="text-2xl font-bold text-dav-maroon text-center mt-8 mb-2">School Events</h2>
     </section>
