@@ -11,7 +11,10 @@ import Admissions from "@/pages/admissions";
 import Gallery from "@/pages/gallery";
 import Contact from "@/pages/contact";
 import NotFound from "@/pages/not-found";
-import EventsPage from "@/pages/events"; // <-- Add this import
+import EventsPage from "@/pages/events";
+import { EventsProvider } from "@/context/events-context"; // <-- RENAMED
+import { Analytics } from "@vercel/analytics/react"; // <-- NEW
+import { SpeedInsights } from "@vercel/speed-insights/react"; // <-- NEW
 
 function Router() {
   return (
@@ -23,7 +26,7 @@ function Router() {
         <Route path="/admissions" component={Admissions} />
         <Route path="/gallery" component={Gallery} />
         <Route path="/contact" component={Contact} />
-        <Route path="/events" component={EventsPage} /> {/* <-- Add this line */}
+        <Route path="/events" component={EventsPage} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
@@ -35,7 +38,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
-        <Router />
+        <EventsProvider>
+          <Router />
+          <Analytics />
+          <SpeedInsights />
+        </EventsProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
