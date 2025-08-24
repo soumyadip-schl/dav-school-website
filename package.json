@@ -13,7 +13,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",
-    "@vercel/speed-insights": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
 "@vercel/analytics": "^1.0.5",
     "@neondatabase/serverless": "^0.10.4",
     "@radix-ui/react-accordion": "^1.2.4",
