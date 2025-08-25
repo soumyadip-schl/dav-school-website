@@ -10,8 +10,9 @@ export type EventItem = {
   DATE?: string;
 };
 
-const SHEET_ID = "13ZaNelSP0D-TE9mRrZz3umvucbvudlMJnbpAAR0pA2c";
-const SHEET_TAB = "EVENTS";
+// Get from environment variables (Vite uses import.meta.env)
+const SHEET_ID = import.meta.env.VITE_GOOGLE_SHEET_CODE;
+const SHEET_TAB = import.meta.env.VITE_EVENTS_TAB_NAME;
 
 const EventsContext = createContext<{ events: EventItem[]; loading: boolean }>({ events: [], loading: true });
 
