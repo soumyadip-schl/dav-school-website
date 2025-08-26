@@ -10,9 +10,8 @@ export type EventItem = {
   DATE?: string;
 };
 
-// Get from environment variables (Vite uses import.meta.env)
-const SHEET_ID = import.meta.env.VITE_GOOGLE_SHEET_CODE;
-const SHEET_TAB = import.meta.env.VITE_EVENTS_TAB_NAME;
+// Directly use the published EVENTS tab CSV link:
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTjx0OELHphVP3nveBTztwOPxIn4kCLc0VYv35dbl8Qyf7KF6PNwqbCj7NZL9C-7T8ySMf0Q25_ZCVA/pub?output=csv";
 
 const EventsContext = createContext<{ events: EventItem[]; loading: boolean }>({ events: [], loading: true });
 
@@ -23,8 +22,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_TAB)}`;
-        const res = await fetch(url);
+        const res = await fetch(SHEET_CSV_URL);
         if (!res.ok) throw new Error("Failed to fetch events");
         const csv = await res.text();
         const parsed = Papa.parse<EventItem>(csv, { header: true, skipEmptyLines: true, dynamicTyping: false, trimHeaders: true });
