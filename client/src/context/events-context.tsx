@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import Papa from "papaparse";
 
 export type EventItem = {
   TITLE: string;
@@ -10,8 +9,7 @@ export type EventItem = {
   DATE?: string;
 };
 
-// Directly use the published EVENTS tab CSV link:
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTjx0OELHphVP3nveBTztwOPxIn4kCLc0VYv35dbl8Qyf7KF6PNwqbCj7NZL9C-7T8ySMf0Q25_ZCVA/pub?output=csv";
+const EVENTS_JSON_URL = "https://raw.githubusercontent.com/soumyadip-schl/assets-dav/dc7d193c6d050e0f92b32f050ad447608f5c8230/events/events.json";
 
 const EventsContext = createContext<{ events: EventItem[]; loading: boolean }>({ events: [], loading: true });
 
@@ -22,12 +20,11 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch(SHEET_CSV_URL);
+        const res = await fetch(EVENTS_JSON_URL);
         if (!res.ok) throw new Error("Failed to fetch events");
-        const csv = await res.text();
-        const parsed = Papa.parse<EventItem>(csv, { header: true, skipEmptyLines: true, dynamicTyping: false, trimHeaders: true });
-        let filteredEvents = Array.isArray(parsed.data)
-          ? parsed.data.filter((event) => event.TITLE && event.TITLE.trim().length > 0)
+        const data = await res.json();
+        const filteredEvents = Array.isArray(data)
+          ? data.filter((event) => event.TITLE && event.TITLE.trim().length > 0)
           : [];
         setEvents(filteredEvents.reverse());
       } catch {
