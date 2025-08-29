@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import type { EventItem } from "../pages/events";
 
 // Converts GitHub blob to raw
@@ -38,6 +38,8 @@ function descriptionToLastFullStop(desc: string): string {
   return lastDot !== -1 ? desc.slice(0, lastDot + 1) : desc;
 }
 
+const AUTO_SLIDESHOW_INTERVAL = 4000; // 4 seconds
+
 const EventsList: React.FC<Props> = ({ events }) => {
   if (!Array.isArray(events) || events.length === 0)
     return <p>No events found.</p>;
@@ -47,9 +49,10 @@ const EventsList: React.FC<Props> = ({ events }) => {
     .filter((e) => e && e.TITLE); // <- No reverse here
 
   // Slideshow index per card, always keep state (never re-key cards)
-  const [slideIndexes, setSlideIndexes] = useState<{ [key: number]: number }>(
-    {}
-  );
+  const [slideIndexes, setSlideIndexes] = useState<{ [key: number]: number }>({});
+
+  // Store refs to intervals so we can clear on unmount
+  const intervalsRef = useRef<{ [key: number]: number }>({});
 
   // Utility to check if slideshow is valid
   const getValidImages = (event: any): string[] => {
@@ -81,6 +84,56 @@ const EventsList: React.FC<Props> = ({ events }) => {
           ? 1 % images.length
           : (prev[idx] + 1) % images.length,
     }));
+  };
+
+  // Automatic slideshow effect per card
+  useEffect(() => {
+    // Clear any existing intervals
+    Object.values(intervalsRef.current).forEach((intervalId) =>
+      clearInterval(intervalId)
+    );
+    intervalsRef.current = {};
+
+    sortedEvents.forEach((event, idx) => {
+      const images = getValidImages(event);
+      if (images.length > 1) {
+        intervalsRef.current[idx] = window.setInterval(() => {
+          setSlideIndexes((prev) => ({
+            ...prev,
+            [idx]:
+              prev[idx] === undefined
+                ? 1 % images.length
+                : (prev[idx] + 1) % images.length,
+          }));
+        }, AUTO_SLIDESHOW_INTERVAL);
+      }
+    });
+
+    // Cleanup all intervals on unmount or events change
+    return () => {
+      Object.values(intervalsRef.current).forEach((intervalId) =>
+        clearInterval(intervalId)
+      );
+      intervalsRef.current = {};
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [events]); // Only restart slideshow if events array changes
+
+  // When user clicks on controls, reset the interval for that card to avoid immediate auto-advance
+  const resetIntervalForCard = (idx: number, images: string[]) => {
+    if (intervalsRef.current[idx]) {
+      clearInterval(intervalsRef.current[idx]);
+    }
+    // Set a new interval for this card only
+    intervalsRef.current[idx] = window.setInterval(() => {
+      setSlideIndexes((prev) => ({
+        ...prev,
+        [idx]:
+          prev[idx] === undefined
+            ? 1 % images.length
+            : (prev[idx] + 1) % images.length,
+      }));
+    }, AUTO_SLIDESHOW_INTERVAL);
   };
 
   return (
@@ -157,6 +210,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
                         onClick={(e) => {
                           e.stopPropagation();
                           handlePrevSlide(idx, images);
+                          resetIntervalForCard(idx, images);
                         }}
                         className="absolute left-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 rounded-full shadow p-2 hover:bg-indigo-500 hover:text-white text-gray-700 transition-all"
                         style={{ zIndex: 2 }}
@@ -183,6 +237,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
                         onClick={(e) => {
                           e.stopPropagation();
                           handleNextSlide(idx, images);
+                          resetIntervalForCard(idx, images);
                         }}
                         className="absolute right-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 rounded-full shadow p-2 hover:bg-indigo-500 hover:text-white text-gray-700 transition-all"
                         style={{ zIndex: 2 }}
@@ -216,6 +271,7 @@ const EventsList: React.FC<Props> = ({ events }) => {
                                 ...sl,
                                 [idx]: i,
                               }));
+                              resetIntervalForCard(idx, images);
                             }}
                           />
                         ))}
