@@ -23,9 +23,9 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const fetchEvents = async () => {
     setLoading(true);
     try {
-      // Force a cache-busting param (timestamp)
-      const url = `${EVENTS_JSON_URL}?_=${Date.now()}`;
-      const res = await fetch(url, { cache: "reload" });
+      // Add a cache-busting param and use no-store for strictest freshness
+      const url = `${EVENTS_JSON_URL}?cb=${Date.now()}`;
+      const res = await fetch(url, { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to fetch events");
       const data = await res.json();
       const filteredEvents = Array.isArray(data)
@@ -46,7 +46,6 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
