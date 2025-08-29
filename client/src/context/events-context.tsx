@@ -10,7 +10,7 @@ export type EventItem = {
 };
 
 const EVENTS_JSON_URL =
-  "https://raw.githubusercontent.com/soumyadip-schl/assets-dav/dc7d193c6d050e0f92b32f050ad447608f5c8230/events/events.json";
+  "https://raw.githubusercontent.com/soumyadip-schl/assets-dav/main/events/events.json";
 
 const EventsContext = createContext<{ events: EventItem[]; loading: boolean }>({ events: [], loading: true });
 
