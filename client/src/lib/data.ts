@@ -64,19 +64,19 @@ export const academicSections = [
     description: "Classes I-V with focus on foundational learning and skill development.",
     icon: "fas fa-book-open",
     subjects: [
-      "English, Hindi, Mathematics",
+      "English, Hindi, Bengali , Mathematics",
       "Environmental Science",
       "Art, Music, Physical Education"
     ]
   },
   {
     title: "Middle Section",
-    description: "Classes VI-VIII with comprehensive subject introduction.",
+    description: "Classes V-VIII with comprehensive subject introduction.",
     icon: "fas fa-microscope",
     subjects: [
-      "Core subjects with practical labs",
-      "Computer Science",
-      "Foreign Language (Sanskrit/French)"
+      "Core subjects",
+      "Computer Labs ",
+      "Third Language (Sanskrit)"
     ]
   },
   {
@@ -120,11 +120,4 @@ export const requiredDocuments = [
   "Character Certificate",
   "Passport Size Photos",
   "Address Proof"
-];
-
-export const importantDates = [
-  { label: "Application Start:", date: "January 1, 2024" },
-  { label: "Last Date:", date: "March 31, 2024" },
-  { label: "Assessment:", date: "April 1-15, 2024" },
-  { label: "Results:", date: "April 20, 2024" }
 ];
