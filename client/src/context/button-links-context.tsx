@@ -1,0 +1,42 @@
+import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+
+type ButtonLink = {
+  label: string;
+  link: string;
+};
+
+type ButtonLinks = {
+  academicsCurriculumGuide: ButtonLink;
+  admissionsApplicationForm: ButtonLink;
+  aboutPublicInfo: ButtonLink;
+};
+
+const RAW_BUTTON_LINKS_URL =
+  "https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/main/public/content/button-links.json";
+
+const ButtonLinksContext = createContext<{
+  buttonLinks: ButtonLinks | null;
+  loading: boolean;
+}>({ buttonLinks: null, loading: true });
+
+export const useButtonLinks = () => useContext(ButtonLinksContext);
+
+export const ButtonLinksProvider = ({ children }: { children: ReactNode }) => {
+  const [buttonLinks, setButtonLinks] = useState<ButtonLinks | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Cache-busting param to always fetch latest
+    fetch(`${RAW_BUTTON_LINKS_URL}?cb=${Date.now()}`, { cache: "no-store" })
+      .then((res) => res.json())
+      .then((data) => setButtonLinks(data))
+      .catch(() => setButtonLinks(null))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <ButtonLinksContext.Provider value={{ buttonLinks, loading }}>
+      {children}
+    </ButtonLinksContext.Provider>
+  );
+};
