@@ -1,6 +1,9 @@
 import { admissionProcess, requiredDocuments } from "@/lib/data";
+import { useButtonLinks } from "@/context/button-links-context";
 
 export default function Admissions() {
+  const { buttonLinks, loading } = useButtonLinks();
+
   return (
     <div className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,10 +51,21 @@ export default function Admissions() {
           </div>
 
           <div className="mt-8 text-center">
-            <button className="bg-dav-saffron hover:bg-dav-orange text-white px-8 py-3 rounded-lg font-semibold transition-colors hover-lift mr-4">
-              <i className="fas fa-download mr-2"></i>
-              Download Application Form
-            </button>
+            {loading || !buttonLinks ? (
+              <button className="bg-dav-saffron text-white px-8 py-3 rounded-lg font-semibold opacity-70 cursor-not-allowed" disabled>
+                <i className="fas fa-download mr-2"></i>
+                Download Application Form
+              </button>
+            ) : (
+              <a
+                className="bg-dav-saffron hover:bg-dav-orange text-white px-8 py-3 rounded-lg font-semibold transition-colors hover-lift mr-4 inline-block"
+                href={buttonLinks.admissionsApplicationForm.link}
+                download
+              >
+                <i className="fas fa-download mr-2"></i>
+                {buttonLinks.admissionsApplicationForm.label}
+              </a>
+            )}
           </div>
         </div>
       </div>
