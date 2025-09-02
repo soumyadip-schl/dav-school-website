@@ -12,9 +12,9 @@ import Gallery from "@/pages/gallery";
 import Contact from "@/pages/contact";
 import NotFound from "@/pages/not-found";
 import EventsPage from "@/pages/events";
-import { EventsProvider } from "@/context/events-context"; // <-- RENAMED
-import { Analytics } from "@vercel/analytics/react"; // <-- NEW
-import { SpeedInsights } from "@vercel/speed-insights/react"; // <-- NEW
+import { ButtonLinksProvider } from "@/context/button-links-context"; // <-- NEW
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 function Router() {
   return (
@@ -38,11 +38,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
-        <EventsProvider>
+        <ButtonLinksProvider>
           <Router />
           <Analytics />
           <SpeedInsights />
-        </EventsProvider>
+        </ButtonLinksProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
