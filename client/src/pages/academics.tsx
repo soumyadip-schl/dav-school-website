@@ -1,6 +1,9 @@
 import { academicSections } from "@/lib/data";
+import { useButtonLinks } from "@/context/button-links-context";
 
 export default function Academics() {
+  const { buttonLinks, loading } = useButtonLinks();
+
   return (
     <div className="py-16 bg-dav-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -8,7 +11,6 @@ export default function Academics() {
           <h1 className="text-3xl font-bold text-dav-maroon mb-4">Academic Excellence</h1>
           <p className="text-gray-600">Comprehensive curriculum following CBSE guidelines</p>
         </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {academicSections.map((section, index) => (
             <div key={index} className="bg-white p-6 rounded-xl shadow-md hover-lift">
@@ -25,12 +27,22 @@ export default function Academics() {
             </div>
           ))}
         </div>
-        
         <div className="mt-12 text-center">
-          <button className="bg-dav-saffron hover:bg-dav-orange text-white px-8 py-3 rounded-lg font-semibold transition-colors hover-lift">
-            <i className="fas fa-download mr-2"></i>
-            Download Curriculum Guide
-          </button>
+          {loading || !buttonLinks ? (
+            <button className="bg-dav-saffron text-white px-8 py-3 rounded-lg font-semibold opacity-70 cursor-not-allowed" disabled>
+              <i className="fas fa-download mr-2"></i>
+              Download Curriculum Guide
+            </button>
+          ) : (
+            <a
+              className="bg-dav-saffron hover:bg-dav-orange text-white px-8 py-3 rounded-lg font-semibold transition-colors hover-lift inline-block"
+              href={buttonLinks.academicsCurriculumGuide.link}
+              download
+            >
+              <i className="fas fa-download mr-2"></i>
+              {buttonLinks.academicsCurriculumGuide.label}
+            </a>
+          )}
         </div>
       </div>
     </div>
