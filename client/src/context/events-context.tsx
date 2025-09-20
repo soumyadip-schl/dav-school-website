@@ -12,27 +12,32 @@ export type EventItem = {
 const EVENTS_JSON_URL =
   "https://raw.githubusercontent.com/soumyadip-schl/assets-dav/main/events/events.json";
 
-const EventsContext = createContext<{ events: EventItem[]; loading: boolean }>({ events: [], loading: true });
+const EventsContext = createContext<{ events: EventItem[]; loading: boolean; error: string | null }>({ events: [], loading: true, error: null });
 
 export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Helper to fetch with cache busting
+  // Helper to fetch with cache busting and timeout
   const fetchEvents = async () => {
     setLoading(true);
+    setError(null);
     try {
-      // Add a cache-busting param and use no-store for strictest freshness
       const url = `${EVENTS_JSON_URL}?cb=${Date.now()}`;
-      const res = await fetch(url, { cache: "no-store" });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+      const res = await fetch(url, { cache: "no-store", signal: controller.signal });
+      clearTimeout(timeout);
       if (!res.ok) throw new Error("Failed to fetch events");
       const data = await res.json();
       const filteredEvents = Array.isArray(data)
         ? data.filter((event) => event.TITLE && event.TITLE.trim().length > 0)
         : [];
       setEvents(filteredEvents.reverse());
-    } catch {
+    } catch (e: any) {
+      setError("Failed to load events. Please try again later.");
       setEvents([]);
     } finally {
       setLoading(false);
@@ -49,7 +54,7 @@ export const EventsProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, []);
 
   return (
-    <EventsContext.Provider value={{ events, loading }}>
+    <EventsContext.Provider value={{ events, loading, error }}>
       {children}
     </EventsContext.Provider>
   );
