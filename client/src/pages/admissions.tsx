@@ -34,7 +34,7 @@ export default function Admissions() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
             <div className="bg-white border-2 border-dav-light p-6 rounded-xl">
               <h3 className="text-xl font-bold text-dav-maroon mb-4">
                 Required Documents
