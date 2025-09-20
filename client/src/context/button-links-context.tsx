@@ -12,7 +12,7 @@ type ButtonLinks = {
 };
 
 const RAW_BUTTON_LINKS_URL =
-  "https://raw.githubusercontent.com/soumyadip-schl/dav-school-website/main/public/content/button-links.json";
+  "https://raw.githubusercontent.com/soumyadip-schl/assets-dav/main/data/button-links.json";
 
 const ButtonLinksContext = createContext<{
   buttonLinks: ButtonLinks | null;
