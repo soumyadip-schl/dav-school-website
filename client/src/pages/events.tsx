@@ -5,7 +5,7 @@ import { useEvents } from "../context/events-context";
 const BATCH_SIZE = 10;
 
 export default function EventsPage() {
-  const { events, loading } = useEvents();
+  const { events, loading, error } = useEvents();
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
 
   const handleLoadMore = () => {
@@ -21,11 +21,13 @@ export default function EventsPage() {
         </div>
         {loading ? (
           <p className="text-center text-gray-600">Loading events...</p>
+        ) : error ? (
+          <p className="text-center text-red-600">{error}</p>
         ) : (
           <>
             <EventsList
               events={events.slice(0, visibleCount)}
-              descriptionClass="text-xs" // 1 unit smaller, pass this prop to EventsList and use on description
+              descriptionClass="text-xs"
             />
             {visibleCount < events.length && (
               <div className="flex justify-center mt-8">
