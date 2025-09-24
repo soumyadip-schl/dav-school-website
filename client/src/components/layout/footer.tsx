@@ -112,7 +112,7 @@ export default function Footer() {
               &copy; 2025 DAV Public School, Kanyapur, Asansol. All rights reserved. | 
               Designed with 🧡🤍💚 by{" "}
               <a
-                href="https://github.com/soumyadipkarforma06"
+                href="https://soumyadipkarforma.onrender.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white underline hover:text-dav-saffron transition-colors"
